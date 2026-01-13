@@ -8,7 +8,7 @@ import java.io.File;
 
 public class MobileCapabilitiesManager {
     public UiAutomator2Options setAndroidCapabilities() {
-        File app = new File(TestStackProperties.getOneappAndroidPath());
+        File app = new File(TestStackProperties.getAndroidPath());
         UiAutomator2Options options = new UiAutomator2Options()
                 .setApp(app.getAbsolutePath())
                 .setAutomationName("UiAutomator2")
@@ -24,7 +24,7 @@ public class MobileCapabilitiesManager {
     }
 
     public XCUITestOptions setIOSCapabilities() {
-        File app = new File(TestStackProperties.getOneappIosPath());
+        File app = new File(TestStackProperties.getIosPath());
         XCUITestOptions options = new XCUITestOptions()
                 .setApp(app.getAbsolutePath())
                 .setAutomationName("XCUITest")
