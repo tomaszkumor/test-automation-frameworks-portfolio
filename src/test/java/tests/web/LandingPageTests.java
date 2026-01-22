@@ -58,4 +58,14 @@ public class LandingPageTests extends BaseTest {
                 .selectTravellers(phpTravelsModel)
                 .clickOnSearchButton();
     }
+
+    @Test(dataProvider = "searchForVisa", dataProviderClass = LandingPageDP.class)
+    public void searchForVisa(PhpTravelsModel phpTravelsModel) {
+        new LandingPage()
+                .clickOnVisaTab()
+                .selectDepartureCountry(phpTravelsModel)
+                .selectArrivalCountry(phpTravelsModel)
+                .selectDate(phpTravelsModel)
+                .clickOnSearchButton();
+    }
 }

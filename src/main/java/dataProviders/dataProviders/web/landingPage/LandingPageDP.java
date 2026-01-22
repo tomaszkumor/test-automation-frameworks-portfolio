@@ -16,6 +16,7 @@ import dataProviders.dataProvidersModels.web.commonModels.DestinationModel;
 import dataProviders.dataProvidersModels.web.hotelsPageModels.HotelsPageModel;
 import dataProviders.dataProvidersModels.web.phpTravelsModel.PhpTravelsModel;
 import dataProviders.dataProvidersModels.web.toursPageModels.ToursPageModel;
+import dataProviders.dataProvidersModels.web.visaPageModels.VisaPageModel;
 import org.testng.annotations.DataProvider;
 
 import java.time.Month;
@@ -101,6 +102,21 @@ public class LandingPageDP {
                                 .expectedDropOffDate(new DateModel("2026", Month.JUNE, "30"))
                                 .expectedDropOffTime(new TimeModel("14","00", "PM"))
                                 .expectedTravellers(new TravellerModel("2", "1", "0"))
+                                .build())
+                        .build()
+                }
+        };
+    }
+
+    @DataProvider
+    Object[][] searchForVisa() {
+        return new Object[][]{
+                {PhpTravelsModel.builder()
+                        .visaPageModel(VisaPageModel
+                                .builder()
+                                .expectedDate(new DateModel("2026", Month.JUNE, "19"))
+                                .expectedDepartureDestination(DestinationModel.builder().country("Poland").build())
+                                .expectedArrivalDestination(DestinationModel.builder().country("Spain").build())
                                 .build())
                         .build()
                 }

@@ -5,6 +5,7 @@ import dataProviders.dataProvidersModels.web.carsPageModels.CarsPageModel;
 import dataProviders.dataProvidersModels.web.flightsPageModels.FlightsPageModel;
 import dataProviders.dataProvidersModels.web.hotelsPageModels.HotelsPageModel;
 import dataProviders.dataProvidersModels.web.toursPageModels.ToursPageModel;
+import dataProviders.dataProvidersModels.web.visaPageModels.VisaPageModel;
 import lombok.Builder;
 import lombok.Data;
 
@@ -18,4 +19,5 @@ public class PhpTravelsModel {
     private HotelsPageModel hotelsPageModel;
     private ToursPageModel toursPageModel;
     private CarsPageModel carsPageModel;
+    private VisaPageModel visaPageModel;
 }
