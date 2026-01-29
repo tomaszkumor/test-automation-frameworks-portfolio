@@ -2,6 +2,7 @@ package models.mobile.menu.savedPage.recommendedReadingListSettingsPage;
 
 import constants.mobile.UpdateType;
 import dataProviders.dataProvidersModels.mobile.wikiAlphaModel.WikiAlphaModel;
+import io.qameta.allure.Step;
 import models.mobile.menu.savedPage.updatesModal.UpdatesModal;
 import org.openqa.selenium.By;
 
@@ -14,6 +15,7 @@ public class RecommendedReadingListSettingsPage extends RecommendedReadingListSe
         log.info("Recommended reading list settings page is displayed.");
     }
 
+    @Step("Change articles number")
     public RecommendedReadingListSettingsPage changeArticlesNumber(WikiAlphaModel wikiAlphaModel) {
         String expectedArticlesNumber = getExpectedArticlesNumberFromDataProvider(wikiAlphaModel);
 
@@ -24,6 +26,30 @@ public class RecommendedReadingListSettingsPage extends RecommendedReadingListSe
         checkArticlesNumberAfterChange(expectedArticlesNumber);
 
         return this;
+    }
+
+    @Step("Check update type before change")
+    public RecommendedReadingListSettingsPage checkUpdateTypeBeforeChange(WikiAlphaModel wikiAlphaModel) {
+        UpdateType updateTypeBeforeChange = getUpdateTypeBeforeChangeFromDataProvider(wikiAlphaModel);
+        checkUpdateType(updateTypeBeforeChange);
+
+        return this;
+    }
+
+    @Step("Check update type after change")
+    public RecommendedReadingListSettingsPage checkUpdateTypeAfterChange(WikiAlphaModel wikiAlphaModel) {
+        UpdateType updateTypeAfterChange = getUpdateTypeAfterChangeFromDataProvider(wikiAlphaModel);
+        checkUpdateType(updateTypeAfterChange);
+
+        return this;
+    }
+
+    @Step("Tap on updates button")
+    public UpdatesModal tapOnUpdatesButton() {
+        mobile.tapOnElement(updatesButton, 15);
+        log.info("Updates button has been tapped.");
+
+        return new UpdatesModal();
     }
 
     private void typeArticlesNumberToInput(String expectedArticlesNumber) {
@@ -53,20 +79,6 @@ public class RecommendedReadingListSettingsPage extends RecommendedReadingListSe
         log.info("Number of articles before change meets expected value.");
     }
 
-    public RecommendedReadingListSettingsPage checkUpdateTypeBeforeChange(WikiAlphaModel wikiAlphaModel) {
-        UpdateType updateTypeBeforeChange = getUpdateTypeBeforeChangeFromDataProvider(wikiAlphaModel);
-        checkUpdateType(updateTypeBeforeChange);
-
-        return this;
-    }
-
-    public RecommendedReadingListSettingsPage checkUpdateTypeAfterChange(WikiAlphaModel wikiAlphaModel) {
-        UpdateType updateTypeAfterChange = getUpdateTypeAfterChangeFromDataProvider(wikiAlphaModel);
-        checkUpdateType(updateTypeAfterChange);
-
-        return this;
-    }
-
     private void checkUpdateType(UpdateType updateType) {
         check.isElementDisplayed(updatesButton, 15);
 
@@ -76,13 +88,6 @@ public class RecommendedReadingListSettingsPage extends RecommendedReadingListSe
         assertThat(actualUpdateType)
                 .as("Update type before change check")
                 .isEqualTo(expectedUpdateType);
-    }
-
-    public UpdatesModal tapOnUpdatesButton() {
-        mobile.tapOnElement(updatesButton, 15);
-        log.info("Updates button has been tapped.");
-
-        return new UpdatesModal();
     }
 
     private void checkIfDiscoverReadingListTitleIsPresent() {

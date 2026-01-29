@@ -1,6 +1,7 @@
 package models.mobile.menu.savedPage.specificResultsListPage;
 
 import dataProviders.dataProvidersModels.mobile.wikiAlphaModel.WikiAlphaModel;
+import io.qameta.allure.Step;
 import utils.tipKiller.TipKiller;
 import org.assertj.core.api.Assertions;
 import org.openqa.selenium.By;
@@ -17,6 +18,7 @@ public class SpecificResultsListPage extends SpecificResultsListPageLocators {
         log.info("Specific results page is displayed.");
     }
 
+    @Step("Check actual specific results in list")
     public SpecificResultsListPage checkActualSpecificResultsInList(WikiAlphaModel wikiAlphaModel) {
         List<String> expectedSpecificResults = getExpectedSpecificResultsFromDataProvider(wikiAlphaModel);
 

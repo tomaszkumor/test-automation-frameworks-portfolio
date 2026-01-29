@@ -1,5 +1,6 @@
 package models.mobile.menu.savedPage.readingListPage;
 
+import io.qameta.allure.Step;
 import utils.tipKiller.TipKiller;
 import models.mobile.menu.savedPage.readingListPage.settingsModal.SettingsModal;
 
@@ -12,6 +13,7 @@ public class ReadingListPage extends ReadingListPageLocators {
         log.info("Reading list page is displayed.");
     }
 
+    @Step("Tap on settings button")
     public SettingsModal tapOnSettingsButton() {
         mobile.tapOnElement(settingsButton, 15);
         log.info("Settings button has been tapped.");

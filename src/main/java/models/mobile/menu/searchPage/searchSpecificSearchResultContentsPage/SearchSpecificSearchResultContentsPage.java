@@ -1,7 +1,7 @@
 package models.mobile.menu.searchPage.searchSpecificSearchResultContentsPage;
 
 import dataProviders.dataProvidersModels.mobile.wikiAlphaModel.WikiAlphaModel;
-import models.mobile.generic.genericSpecificSearchResultPage.GenericSpecificSearchResultPage;
+import io.qameta.allure.Step;
 import models.mobile.generic.genericSpecificSearchResultContentsPage.GenericSpecificSearchResultContentsPage;
 import models.mobile.menu.searchPage.searchSpecificSearchResultPage.SearchSpecificSearchResultPage;
 
@@ -13,12 +13,7 @@ public class SearchSpecificSearchResultContentsPage extends SearchSpecificSearch
         log.info("Contents page is displayed.");
     }
 
-    public SearchSpecificSearchResultContentsPage tapOnSaveButton() {
-        new GenericSpecificSearchResultPage().tapOnSaveButton();
-
-        return this;
-    }
-
+    @Step("Tap on specific contents item")
     public SearchSpecificSearchResultPage tapOnSpecificContentsItem(WikiAlphaModel wikiAlphaModel) {
         String expectedContentItem = wikiAlphaModel.getSearchModel().getExpectedContentItem();
         new GenericSpecificSearchResultContentsPage().tapOnSpecificContentItem(expectedContentItem);

@@ -3,6 +3,7 @@ package models.api.controllerUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dataProviders.dataProvidersModels.api.PetStoreModel;
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import models.api.pojo.POJOApiResponse;
@@ -17,6 +18,7 @@ public class EndpointUser {
     private POJOApiResponse pojoApiResponse;
     private POJOUser pojoUser;
 
+    @Step("Send POST request to /user endpoint")
     public EndpointUser sendPostRequestUser(PetStoreModel petStoreModel) {
         RequestSpecification requestSpecification = buildBasicRequestSpecification();
         String requestBody = getExpectedRequestBodyFromFile(petStoreModel);
@@ -33,6 +35,7 @@ public class EndpointUser {
         return this;
     }
 
+    @Step("Send GET request to /user/login endpoint")
     public EndpointUser sendGetRequestUserLogin(PetStoreModel petStoreModel) {
         RequestSpecification requestSpecification = buildBasicRequestSpecification();
         String userName = getExpectedUserNameFromDataProvider(petStoreModel);
@@ -51,6 +54,7 @@ public class EndpointUser {
         return this;
     }
 
+    @Step("Send GET request to /user/logout endpoint")
     public EndpointUser sendGetRequestUserLogout() {
         RequestSpecification requestSpecification = buildBasicRequestSpecification();
         String requestEndpointUrl = "/user/logout";
@@ -64,6 +68,7 @@ public class EndpointUser {
         return this;
     }
 
+    @Step("Send GET request to /user/{userName} endpoint")
     public EndpointUser sendGetRequestUser(PetStoreModel petStoreModel) {
         RequestSpecification requestSpecification = buildBasicRequestSpecification();
         String userName = getExpectedUserNameFromDataProvider(petStoreModel);
@@ -81,6 +86,7 @@ public class EndpointUser {
         return this;
     }
 
+    @Step("Send PUT request to /user/{userName} endpoint")
     public EndpointUser sendPutRequestUser(PetStoreModel petStoreModel) {
         RequestSpecification requestSpecification = buildBasicRequestSpecification();
         String requestBody = getExpectedRequestBodyFromFile(petStoreModel);
@@ -98,6 +104,7 @@ public class EndpointUser {
         return this;
     }
 
+    @Step("Send DELETE request to /user/{userName} endpoint")
     public EndpointUser sendDeleteRequestUser(PetStoreModel petStoreModel) {
         RequestSpecification requestSpecification = buildAuthorizedRequestSpecification();
         String userName = getExpectedUserNameFromDataProvider(petStoreModel);

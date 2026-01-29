@@ -7,6 +7,7 @@ import dataProviders.dataProvidersModels.web.commonModels.DateModel;
 import dataProviders.dataProvidersModels.web.commonModels.TravellerModel;
 import dataProviders.dataProvidersModels.web.commonModels.DestinationModel;
 import dataProviders.dataProvidersModels.web.phpTravelsModel.PhpTravelsModel;
+import io.qameta.allure.Step;
 import models.web.menu.toursPage.toursSearchPage.ToursSearchPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -25,6 +26,7 @@ public class SearchBarTours extends SearchBarToursLocators {
         log.info("Tours search bar is displayed.");
     }
 
+    @Step("Select city")
     public SearchBarTours selectCity(PhpTravelsModel phpTravelsModel) {
         checkCityBeforeInput();
         clickOnCityInput();
@@ -35,6 +37,7 @@ public class SearchBarTours extends SearchBarToursLocators {
         return this;
     }
 
+    @Step("Select date")
     public SearchBarTours selectDate(PhpTravelsModel phpTravelsModel) {
         selectCheckInDateYear(phpTravelsModel);
         selectCheckInDateMonth(phpTravelsModel);
@@ -44,6 +47,7 @@ public class SearchBarTours extends SearchBarToursLocators {
         return this;
     }
 
+    @Step("Select travellers")
     public SearchBarTours selectTravellers(PhpTravelsModel phpTravelsModel) {
         checkInitialTravellersCount();
         clickOnTravellersInput();
@@ -57,6 +61,7 @@ public class SearchBarTours extends SearchBarToursLocators {
         return this;
     }
 
+    @Step("Click on search button")
     public ToursSearchPage clickOnSearchButton() {
         click.clickOnVisibleElement(searchButton, 15);
         log.info("Search button has been clicked.");

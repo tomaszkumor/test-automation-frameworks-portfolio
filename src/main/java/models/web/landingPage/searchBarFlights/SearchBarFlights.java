@@ -10,6 +10,7 @@ import dataProviders.dataProvidersModels.web.commonModels.DateModel;
 import dataProviders.dataProvidersModels.web.commonModels.TravellerModel;
 import dataProviders.dataProvidersModels.web.commonModels.AirportModel;
 import dataProviders.dataProvidersModels.web.phpTravelsModel.PhpTravelsModel;
+import io.qameta.allure.Step;
 import models.web.menu.flightsPage.flightsSearchPage.FlightsSearchPage;
 import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.By;
@@ -33,6 +34,7 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         log.info("Flights search bar is displayed.");
     }
 
+    @Step("Select departure location")
     public SearchBarFlights selectDepartureLocation(PhpTravelsModel phpTravelsModel) {
         checkDepartureLocationBeforeInput();
         clickOnDepartureLocationInput();
@@ -44,6 +46,7 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         return this;
     }
 
+    @Step("Select arrival location")
     public SearchBarFlights selectArrivalLocation(PhpTravelsModel phpTravelsModel) {
         checkArrivalLocationBeforeInput();
         clickOnArrivalLocationInput();
@@ -55,6 +58,7 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         return this;
     }
 
+    @Step("Select flight destination")
     public SearchBarFlights selectFlightDestination(PhpTravelsModel phpTravelsModel) {
         selectSpecificFlightDestination(phpTravelsModel);
         compareFlightDestinies(phpTravelsModel);
@@ -62,6 +66,7 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         return this;
     }
 
+    @Step("Select cabin class")
     public SearchBarFlights selectCabinClass(PhpTravelsModel phpTravelsModel) {
         selectSpecificCabinClass(phpTravelsModel);
         compareCabinClasses(phpTravelsModel);
@@ -69,6 +74,7 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         return this;
     }
 
+    @Step("Swap departure and arrival locations")
     public SearchBarFlights swapDepartureAndArrivalLocations() {
         swapLocations();
         checkLocationsAfterSwap();
@@ -76,6 +82,7 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         return this;
     }
 
+    @Step("Select departure date")
     public SearchBarFlights selectDepartureDate(PhpTravelsModel phpTravelsModel) {
         selectDepartureDateYear(phpTravelsModel);
         selectDepartureDateMonth(phpTravelsModel);
@@ -85,6 +92,7 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         return this;
     }
 
+    @Step("Select return date")
     public SearchBarFlights selectReturnDate(PhpTravelsModel phpTravelsModel) {
         selectReturnDateYear(phpTravelsModel);
         selectReturnDateMonth(phpTravelsModel);
@@ -94,6 +102,7 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         return this;
     }
 
+    @Step("Select travellers")
     public SearchBarFlights selectTravellers(PhpTravelsModel phpTravelsModel) {
         checkInitialTravellersCount();
         clickOnTravellersInput();
@@ -108,6 +117,7 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         return this;
     }
 
+    @Step("Click on search button")
     public FlightsSearchPage clickOnSearchButton() {
         click.clickOnVisibleElement(searchButton, 15);
         log.info("Search button has been clicked.");

@@ -10,6 +10,7 @@ import dataProviders.dataProvidersModels.web.commonModels.DateModel;
 import dataProviders.dataProvidersModels.web.commonModels.DestinationModel;
 import dataProviders.dataProvidersModels.web.commonModels.TravellerModel;
 import dataProviders.dataProvidersModels.web.phpTravelsModel.PhpTravelsModel;
+import io.qameta.allure.Step;
 import models.web.menu.carsPage.carsSearchPage.CarsSearchPage;
 import models.web.menu.toursPage.toursSearchPage.ToursSearchPage;
 import org.openqa.selenium.By;
@@ -30,6 +31,7 @@ public class SearchBarCars extends SearchBarCarsLocators {
         log.info("Cars search bar is displayed.");
     }
 
+    @Step("Select departure airport")
     public SearchBarCars selectDepartureAirport(PhpTravelsModel phpTravelsModel) {
         checkDepartureAirportBeforeInput();
         clickOnDepartureAirportInput();
@@ -40,6 +42,7 @@ public class SearchBarCars extends SearchBarCarsLocators {
         return this;
     }
 
+    @Step("Select arrival city")
     public SearchBarCars selectArrivalCity(PhpTravelsModel phpTravelsModel) {
         checkArrivalCityBeforeInput();
         clickOnArrivalCityInput();
@@ -50,6 +53,7 @@ public class SearchBarCars extends SearchBarCarsLocators {
         return this;
     }
 
+    @Step("Select pick up date")
     public SearchBarCars selectPickUpDate(PhpTravelsModel phpTravelsModel) {
         selectPickUpDateYear(phpTravelsModel);
         selectPickUpDateMonth(phpTravelsModel);
@@ -59,6 +63,7 @@ public class SearchBarCars extends SearchBarCarsLocators {
         return this;
     }
 
+    @Step("Select drop off date")
     public SearchBarCars selectDropOffDate(PhpTravelsModel phpTravelsModel) {
         selectDropOffDateYear(phpTravelsModel);
         selectDropOffDateMonth(phpTravelsModel);
@@ -68,6 +73,7 @@ public class SearchBarCars extends SearchBarCarsLocators {
         return this;
     }
 
+    @Step("Select pick up time")
     public SearchBarCars selectPickUpTime(PhpTravelsModel phpTravelsModel) {
         checkPickUpTimeBeforeInput();
         clickOnPickUpTimeSelect();
@@ -78,6 +84,7 @@ public class SearchBarCars extends SearchBarCarsLocators {
         return this;
     }
 
+    @Step("Select drop off time")
     public SearchBarCars selectDropOffTime(PhpTravelsModel phpTravelsModel) {
         checkDropOffTimeBeforeInput();
         clickOnDropOffTimeSelect();
@@ -88,11 +95,26 @@ public class SearchBarCars extends SearchBarCarsLocators {
         return this;
     }
 
+    @Step("Click on search button")
     public CarsSearchPage clickOnSearchButton() {
         click.clickOnVisibleElement(searchButton, 15);
         log.info("Search button has been clicked.");
 
         return new CarsSearchPage();
+    }
+
+    @Step("Select travellers")
+    public SearchBarCars selectTravellers(PhpTravelsModel phpTravelsModel) {
+        checkInitialTravellersCount();
+        clickOnTravellersInput();
+        checkIfTravellersWindowIsDisplayed(true);
+        setAdultsNumber(phpTravelsModel);
+        setChildrenNumber(phpTravelsModel);
+        closeTravellersWindow();
+        checkIfTravellersWindowIsDisplayed(false);
+        checkTravellersCountAfterChange(phpTravelsModel);
+
+        return this;
     }
 
     private void checkPickUpTimeBeforeInput() {
@@ -170,19 +192,6 @@ public class SearchBarCars extends SearchBarCarsLocators {
     private void checkDropOffTimeAfterInput(PhpTravelsModel phpTravelsModel) {
         String expectedTime = getExpectedTime(phpTravelsModel, DateType.DROP_OFF);
         compareTimeBeforeOrAfterSelect(expectedTime, dropOffTimeSelect, "Drop off time", "after");
-    }
-
-    public SearchBarCars selectTravellers(PhpTravelsModel phpTravelsModel) {
-        checkInitialTravellersCount();
-        clickOnTravellersInput();
-        checkIfTravellersWindowIsDisplayed(true);
-        setAdultsNumber(phpTravelsModel);
-        setChildrenNumber(phpTravelsModel);
-        closeTravellersWindow();
-        checkIfTravellersWindowIsDisplayed(false);
-        checkTravellersCountAfterChange(phpTravelsModel);
-
-        return this;
     }
 
     private void checkInitialTravellersCount() {

@@ -1,5 +1,6 @@
 package models.mobile.menu.searchPage;
 
+import io.qameta.allure.Step;
 import utils.tipKiller.TipKiller;
 import models.mobile.menu.searchPage.searchSearchPage.SearchSearchPage;
 
@@ -12,6 +13,7 @@ public class SearchPage extends SearchPageLocators {
         log.info("Search page is displayed.");
     }
 
+    @Step("Tap on search input")
     public SearchSearchPage tapOnSearchInput() {
         mobile.tapOnElement(searchInput, 15);
         log.info("Search input has been tapped.");

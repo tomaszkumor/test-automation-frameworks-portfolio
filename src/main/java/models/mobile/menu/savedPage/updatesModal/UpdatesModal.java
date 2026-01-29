@@ -2,6 +2,7 @@ package models.mobile.menu.savedPage.updatesModal;
 
 import constants.mobile.UpdateType;
 import dataProviders.dataProvidersModels.mobile.wikiAlphaModel.WikiAlphaModel;
+import io.qameta.allure.Step;
 import models.mobile.menu.savedPage.recommendedReadingListSettingsPage.RecommendedReadingListSettingsPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -17,6 +18,7 @@ public class UpdatesModal extends UpdatesModalLocators {
         log.info("Updates modal is displayed");
     }
 
+    @Step("Change update type")
     public RecommendedReadingListSettingsPage changeUpdateType(WikiAlphaModel wikiAlphaModel) {
         UpdateType expectedUpdateType = getExpectedUpdateTypeFromDataProvider(wikiAlphaModel);
         String updateTypeName = getUpdateTypeNoun(expectedUpdateType);

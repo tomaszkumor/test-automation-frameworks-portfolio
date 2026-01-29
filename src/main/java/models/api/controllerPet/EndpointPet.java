@@ -3,6 +3,7 @@ package models.api.controllerPet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dataProviders.dataProvidersModels.api.PetStoreModel;
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import models.api.pojo.POJOPet;
@@ -16,6 +17,7 @@ public class EndpointPet {
     private Response response;
     private POJOPet pojoPet;
 
+    @Step("Send POST request to /pet endpoint")
     public EndpointPet sendPostRequestPet(PetStoreModel petStoreModel) {
         RequestSpecification requestSpecification = buildBasicRequestSpecification();
         String requestBody = getExpectedRequestBodyFromFile(petStoreModel);
@@ -31,6 +33,7 @@ public class EndpointPet {
         return this;
     }
 
+    @Step("Send GET request to /pet/findByStatus endpoint")
     public EndpointPet sendGetRequestPetFindByStatus(PetStoreModel petStoreModel) {
         RequestSpecification requestSpecification = buildBasicRequestSpecification();
         String petStatus = getExpectedPetStatusFromDataProvider(petStoreModel);
@@ -46,6 +49,7 @@ public class EndpointPet {
         return this;
     }
 
+    @Step("Send GET request to /pet/{petId} endpoint")
     public EndpointPet sendGetRequestPetFindById(PetStoreModel petStoreModel) {
         RequestSpecification requestSpecification = buildBasicRequestSpecification();
         int petId = getExpectedPetIdFromDataProvider(petStoreModel);
@@ -62,6 +66,7 @@ public class EndpointPet {
         return this;
     }
 
+    @Step("Send PUT request to /pet endpoint")
     public EndpointPet sendPutRequestPet(PetStoreModel petStoreModel) {
         RequestSpecification requestSpecification = buildBasicRequestSpecification();
         String requestBody = getExpectedRequestBodyFromFile(petStoreModel);
@@ -77,6 +82,7 @@ public class EndpointPet {
         return this;
     }
 
+    @Step("Send DELETE request to /pet/{petId} endpoint")
     public EndpointPet sendDeleteRequestPet(PetStoreModel petStoreModel) {
         RequestSpecification requestSpecification = buildAuthorizedRequestSpecification();
         int petId = getExpectedPetIdFromDataProvider(petStoreModel);

@@ -1,6 +1,7 @@
 package models.mobile.menu.discoverPage.discoverSearchPage;
 
 import dataProviders.dataProvidersModels.mobile.wikiAlphaModel.WikiAlphaModel;
+import io.qameta.allure.Step;
 import models.mobile.generic.genericSearchPage.GenericSearchPage;
 import models.mobile.menu.discoverPage.discoverSpecificSearchResultPage.DiscoverSpecificSearchResultPage;
 
@@ -12,6 +13,7 @@ public class DiscoverSearchPage extends DiscoverSearchPageLocators {
         log.info("Discover search page is displayed.");
     }
 
+    @Step("Type phrase to search bar")
     public DiscoverSearchPage typePhraseToSearchBar(WikiAlphaModel wikiAlphaModel) {
         String expectedPhrase = wikiAlphaModel.getDiscoveryModel().getSearchPhrase();
         new GenericSearchPage().typePhraseToSearchBar(expectedPhrase);
@@ -19,6 +21,7 @@ public class DiscoverSearchPage extends DiscoverSearchPageLocators {
         return this;
     }
 
+    @Step("Tap on specific search result")
     public DiscoverSpecificSearchResultPage tapOnSpecificSearchResult(WikiAlphaModel wikiAlphaModel) {
         String expectedPhrase = wikiAlphaModel.getDiscoveryModel().getSearchPhrase();
         new GenericSearchPage().tapOnSpecificSearchResult(expectedPhrase);

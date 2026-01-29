@@ -4,6 +4,7 @@ import constants.common.Date;
 import dataProviders.dataProvidersModels.web.commonModels.DateModel;
 import dataProviders.dataProvidersModels.web.commonModels.DestinationModel;
 import dataProviders.dataProvidersModels.web.phpTravelsModel.PhpTravelsModel;
+import io.qameta.allure.Step;
 import models.web.menu.visaPage.visaSearchPage.VisaSearchPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -22,6 +23,7 @@ public class SearchBarVisa extends SearchBarVisaLocators {
         log.info("Visa search bar is displayed.");
     }
 
+    @Step("Select departure country")
     public SearchBarVisa selectDepartureCountry(PhpTravelsModel phpTravelsModel) {
         clickOnDepartureCountryInput();
         checkIfCountriesAreDisplayed();
@@ -31,6 +33,7 @@ public class SearchBarVisa extends SearchBarVisaLocators {
         return this;
     }
 
+    @Step("Select arrival country")
     public SearchBarVisa selectArrivalCountry(PhpTravelsModel phpTravelsModel) {
         checkArrivalCountryBeforeInput();
         clickOnArrivalCountryInput();
@@ -41,6 +44,7 @@ public class SearchBarVisa extends SearchBarVisaLocators {
         return this;
     }
 
+    @Step("Select date")
     public SearchBarVisa selectDate(PhpTravelsModel phpTravelsModel) {
         selectCheckInDateYear(phpTravelsModel);
         selectCheckInDateMonth(phpTravelsModel);
@@ -50,6 +54,7 @@ public class SearchBarVisa extends SearchBarVisaLocators {
         return this;
     }
 
+    @Step("Click on search button")
     public VisaSearchPage clickOnSearchButton() {
         click.clickOnVisibleElement(searchButton, 15);
         log.info("Search button has been clicked.");

@@ -9,6 +9,7 @@ import dataProviders.dataProvidersModels.web.commonModels.DestinationModel;
 import dataProviders.dataProvidersModels.web.hotelsPageModels.AccommodationModel;
 import dataProviders.dataProvidersModels.web.hotelsPageModels.ChildModel;
 import dataProviders.dataProvidersModels.web.phpTravelsModel.PhpTravelsModel;
+import io.qameta.allure.Step;
 import models.web.menu.hotelsPage.hotelsSearchPage.HotelsSearchPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -29,6 +30,7 @@ public class SearchBarHotels extends SearchBarHotelsLocators {
         log.info("Hotels search bar is displayed.");
     }
 
+    @Step("Select city")
     public SearchBarHotels selectCity(PhpTravelsModel phpTravelsModel) {
         checkCityBeforeInput();
         clickOnCityInput();
@@ -39,6 +41,7 @@ public class SearchBarHotels extends SearchBarHotelsLocators {
         return this;
     }
 
+    @Step("Select check in date")
     public SearchBarHotels selectCheckInDate(PhpTravelsModel phpTravelsModel) {
         selectCheckInDateYear(phpTravelsModel);
         selectCheckInDateMonth(phpTravelsModel);
@@ -48,6 +51,7 @@ public class SearchBarHotels extends SearchBarHotelsLocators {
         return this;
     }
 
+    @Step("Select check out date")
     public SearchBarHotels selectCheckOutDate(PhpTravelsModel phpTravelsModel) {
         selectCheckOutDateYear(phpTravelsModel);
         selectCheckOutDateMonth(phpTravelsModel);
@@ -57,6 +61,7 @@ public class SearchBarHotels extends SearchBarHotelsLocators {
         return this;
     }
 
+    @Step("Select accommodation")
     public SearchBarHotels selectAccommodation(PhpTravelsModel phpTravelsModel) {
         checkInitialGuestsCount();
         checkInitialRoomsCount();
@@ -75,6 +80,7 @@ public class SearchBarHotels extends SearchBarHotelsLocators {
         return this;
     }
 
+    @Step("Click on search button")
     public HotelsSearchPage clickOnSearchButton() {
         click.clickOnVisibleElement(searchButton, 15);
         log.info("Search button has been clicked.");

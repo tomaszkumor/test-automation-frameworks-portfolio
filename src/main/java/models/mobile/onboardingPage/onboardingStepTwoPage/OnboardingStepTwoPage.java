@@ -1,5 +1,6 @@
 package models.mobile.onboardingPage.onboardingStepTwoPage;
 
+import io.qameta.allure.Step;
 import models.mobile.onboardingPage.onboardingStepThreePage.OnboardingStepThreePage;
 import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.By;
@@ -15,6 +16,7 @@ public class OnboardingStepTwoPage extends OnboardingStepTwoPageLocators {
         log.info("Onboarding - Step two page is displayed.");
     }
 
+    @Step("Check description")
     public OnboardingStepTwoPage checkDescription() {
         By titleLocator = By.xpath("//android.widget.TextView[@resource-id = 'org.wikipedia.alpha:id/primaryTextView']");
         check.isNumberOfElementsEqualTo(titleLocator, 1, 50, 15);
@@ -33,6 +35,7 @@ public class OnboardingStepTwoPage extends OnboardingStepTwoPageLocators {
         return this;
     }
 
+    @Step("Tap on forward button")
     public OnboardingStepThreePage tapOnForwardButton() {
         mobile.tapOnElement(forwardButton, 15);
         log.info("Forward button has been tapped.");
@@ -40,6 +43,7 @@ public class OnboardingStepTwoPage extends OnboardingStepTwoPageLocators {
         return new OnboardingStepThreePage();
     }
 
+    @Step("Swipe to onboarding step three page")
     public OnboardingStepThreePage swipeToOnboardingStepThreePage() {
         mobile.swipeRight(600);
         log.info("Swiped to 'Onboarding step three' page.");

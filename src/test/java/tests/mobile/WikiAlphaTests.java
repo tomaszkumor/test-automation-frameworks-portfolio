@@ -63,7 +63,7 @@ public class WikiAlphaTests extends BaseTest {
                 .tapOnTabMore()
                 .tapOnSettingsButton()
                 .tapOnThemesButton()
-                .tapOnFitToSystemThemeButton()
+                .tapOnFitToSystemThemeSwitch()
                 .changeTheme(wikiAlphaModel)
                 .closeThemesModal();
     }

@@ -1,6 +1,7 @@
 package models.mobile.onboardingPage.onboardingStepOnePage.languageSelectionPage;
 
 import dataProviders.dataProvidersModels.mobile.wikiAlphaModel.WikiAlphaModel;
+import io.qameta.allure.Step;
 import models.mobile.onboardingPage.onboardingStepOnePage.addNewLanguagePage.AddNewLanguagePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -14,6 +15,7 @@ public class LanguageSelectionPage extends LanguageSelectionPageLocators {
         log.info("Onboarding - step one - select language page is displayed");
     }
 
+    @Step("Tap on find language button")
     public LanguageSelectionPage tapOnFindLanguageButton() {
         mobile.tapOnElement(findLanguageButton, 15);
         log.info("Find language button has been tapped.");
@@ -21,6 +23,7 @@ public class LanguageSelectionPage extends LanguageSelectionPageLocators {
         return this;
     }
 
+    @Step("Search for language")
     public LanguageSelectionPage searchForLanguage(WikiAlphaModel wikiAlphaModel) {
         checkSearchLanguageInputBeforeChange();
 
@@ -32,6 +35,7 @@ public class LanguageSelectionPage extends LanguageSelectionPageLocators {
         return this;
     }
 
+    @Step("Select language")
     public AddNewLanguagePage selectLanguage(WikiAlphaModel wikiAlphaModel) {
         String language = getExpectedLanguageToAddFromDataProvider(wikiAlphaModel);
 

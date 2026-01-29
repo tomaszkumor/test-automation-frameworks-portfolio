@@ -1,5 +1,6 @@
 package models.mobile.menu.searchPage.searchSpecificSearchResultPage;
 
+import io.qameta.allure.Step;
 import models.mobile.generic.genericSpecificSearchResultPage.GenericSpecificSearchResultPage;
 import utils.tipKiller.TipKiller;
 import models.mobile.menu.searchPage.searchSpecificSearchResultContentsPage.SearchSpecificSearchResultContentsPage;
@@ -13,6 +14,7 @@ public class SearchSpecificSearchResultPage extends SearchSpecificSearchResultPa
         log.info("Search specific search page is displayed.");
     }
 
+    @Step("Tap on contents button")
     public SearchSpecificSearchResultContentsPage tapOnContentsButton() {
         new GenericSpecificSearchResultPage().tapOnContentsButton();
 

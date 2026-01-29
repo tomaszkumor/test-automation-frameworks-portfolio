@@ -1,5 +1,6 @@
 package models.mobile.menu.moreModal.yearInReviewPage.yearInReviewStepSevenPage;
 
+import io.qameta.allure.Step;
 import models.mobile.menu.moreModal.yearInReviewPage.improveYearInReviewModal.ImproveYearInReviewModal;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,6 +12,7 @@ public class YearInReviewStepSevenPage extends YearInReviewStepSevenPageLocators
         log.info("Year in review step seven page is displayed.");
     }
 
+    @Step("Check description")
     public YearInReviewStepSevenPage checkDescription() {
         String actualTitle = get.getValueFromElement(title, "text");
         String expectedTitle = "YearInReviewStepSixPage";
@@ -19,6 +21,7 @@ public class YearInReviewStepSevenPage extends YearInReviewStepSevenPageLocators
         return this;
     }
 
+    @Step("Tap on forward button")
     public ImproveYearInReviewModal tapOnForwardButton() {
         mobile.tapOnElement(forwardButton, 15);
         log.info("Forward button has been tapped.");

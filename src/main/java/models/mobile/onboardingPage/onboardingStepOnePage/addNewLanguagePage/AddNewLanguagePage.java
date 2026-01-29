@@ -1,6 +1,7 @@
 package models.mobile.onboardingPage.onboardingStepOnePage.addNewLanguagePage;
 
 import dataProviders.dataProvidersModels.mobile.wikiAlphaModel.WikiAlphaModel;
+import io.qameta.allure.Step;
 import models.mobile.onboardingPage.onboardingStepOnePage.OnboardingStepOnePage;
 import models.mobile.onboardingPage.onboardingStepOnePage.languageSelectionPage.LanguageSelectionPage;
 import org.assertj.core.api.Assertions;
@@ -17,6 +18,7 @@ public class AddNewLanguagePage extends AddNewLanguagePageLocators {
         log.info("Onboarding - step one - add/edit language page is displayed");
     }
 
+    @Step("Tap on back button")
     public OnboardingStepOnePage tapOnBackButton() {
         mobile.tapOnElement(backButton, 15);
         log.info("Back button has been tapped.");
@@ -24,6 +26,7 @@ public class AddNewLanguagePage extends AddNewLanguagePageLocators {
         return new OnboardingStepOnePage();
     }
 
+    @Step("Tap on add language button")
     public LanguageSelectionPage tapOnAddLanguageButton() {
         mobile.tapOnElement(addLanguageButton, 15);
         log.info("Add language button has been tapped.");
@@ -31,6 +34,7 @@ public class AddNewLanguagePage extends AddNewLanguagePageLocators {
         return new LanguageSelectionPage();
     }
 
+    @Step("Check languages before change")
     public AddNewLanguagePage checkLanguagesBeforeChange(WikiAlphaModel wikiAlphaModel) {
         List<String> expectedLanguages = getExpectedLanguagesBeforeChangeFromDataProvider(wikiAlphaModel);
         checkLanguages(expectedLanguages, "before");
@@ -38,6 +42,7 @@ public class AddNewLanguagePage extends AddNewLanguagePageLocators {
         return this;
     }
 
+    @Step("Check languages after change")
     public AddNewLanguagePage checkLanguagesAfterChange(WikiAlphaModel wikiAlphaModel) {
         List<String> expectedLanguages = getExpectedLanguagesAfterChangeFromDataProvider(wikiAlphaModel);
         checkLanguages(expectedLanguages, "after");

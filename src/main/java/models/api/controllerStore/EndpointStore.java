@@ -3,6 +3,7 @@ package models.api.controllerStore;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dataProviders.dataProvidersModels.api.PetStoreModel;
+import io.qameta.allure.Step;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import models.api.pojo.POJOOrder;
@@ -16,6 +17,7 @@ public class EndpointStore {
     private Response response;
     private POJOOrder pojoOrder;
 
+    @Step("Send GET request to /store/inventory endpoint")
     public EndpointStore sendGetRequestStoreInventory() {
         RequestSpecification requestSpecification = buildBasicRequestSpecification();
         String requestEndpointUrl = "/store/inventory";
@@ -29,6 +31,7 @@ public class EndpointStore {
         return this;
     }
 
+    @Step("Send POST request to /store/order endpoint")
     public EndpointStore sendPostRequestStoreOrder(PetStoreModel petStoreModel) {
         RequestSpecification requestSpecification = buildBasicRequestSpecification();
         String requestBody = getExpectedRequestBodyFromFile(petStoreModel);
@@ -44,6 +47,7 @@ public class EndpointStore {
         return this;
     }
 
+    @Step("Send GET request to /store/order/{orderId} endpoint")
     public EndpointStore sendGetRequestStoreOrder(PetStoreModel petStoreModel) {
         RequestSpecification requestSpecification = buildBasicRequestSpecification();
         int orderId = getExpectedOrderIdFromDataProvider(petStoreModel);
@@ -60,6 +64,7 @@ public class EndpointStore {
         return this;
     }
 
+    @Step("Send DELETE request to /store/order/{orderId} endpoint")
     public EndpointStore sendDeleteRequestStoreOrder(PetStoreModel petStoreModel) {
         RequestSpecification requestSpecification = buildBasicRequestSpecification();
         int orderId = getExpectedOrderIdFromDataProvider(petStoreModel);

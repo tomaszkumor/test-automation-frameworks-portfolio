@@ -1,5 +1,6 @@
 package models.mobile.menu.moreModal.yearInReviewPage.yearInReviewStepFourPage;
 
+import io.qameta.allure.Step;
 import models.mobile.menu.moreModal.yearInReviewPage.yearInReviewStepFivePage.YearInReviewStepFivePage;
 import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.By;
@@ -12,6 +13,7 @@ public class YearInReviewStepFourPage extends YearInReviewStepFourPageLocators {
         log.info("Year in review step four page is displayed.");
     }
 
+    @Step("Check description")
     public YearInReviewStepFourPage checkDescription() {
         By titleLocator = By.xpath("(//android.widget.ScrollView/android.widget.TextView)[1]");
         check.isNumberOfElementsEqualTo(titleLocator, 1, 50, 15);
@@ -30,6 +32,7 @@ public class YearInReviewStepFourPage extends YearInReviewStepFourPageLocators {
         return this;
     }
 
+    @Step("Tap on forward button")
     public YearInReviewStepFivePage tapOnForwardButton() {
         mobile.tapOnElement(forwardButton, 15);
         log.info("Forward button has been tapped.");
@@ -37,6 +40,7 @@ public class YearInReviewStepFourPage extends YearInReviewStepFourPageLocators {
         return new YearInReviewStepFivePage();
     }
 
+    @Step("Swipe to year in review step five page")
     public YearInReviewStepFivePage swipeToYearInReviewStepFivePage() {
         mobile.swipeRight(600);
         log.info("Swiped to 'Year in review step five' page.");

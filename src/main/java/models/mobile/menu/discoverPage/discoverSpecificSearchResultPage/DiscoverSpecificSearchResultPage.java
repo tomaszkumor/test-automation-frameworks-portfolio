@@ -1,5 +1,6 @@
 package models.mobile.menu.discoverPage.discoverSpecificSearchResultPage;
 
+import io.qameta.allure.Step;
 import models.mobile.generic.genericSpecificSearchResultPage.GenericSpecificSearchResultPage;
 import utils.tipKiller.TipKiller;
 
@@ -13,6 +14,7 @@ public class DiscoverSpecificSearchResultPage extends DiscoverSpecificSearchResu
         log.info("Discover specific search page is displayed.");
     }
 
+    @Step("Tap on save button")
     public DiscoverSpecificSearchResultPage tapOnSaveButton() {
         new GenericSpecificSearchResultPage().tapOnSaveButton();
 

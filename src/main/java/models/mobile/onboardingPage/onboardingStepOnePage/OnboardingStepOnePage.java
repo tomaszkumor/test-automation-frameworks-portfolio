@@ -1,6 +1,7 @@
 package models.mobile.onboardingPage.onboardingStepOnePage;
 
 import dataProviders.dataProvidersModels.mobile.wikiAlphaModel.WikiAlphaModel;
+import io.qameta.allure.Step;
 import models.mobile.onboardingPage.onboardingStepOnePage.addNewLanguagePage.AddNewLanguagePage;
 import models.mobile.onboardingPage.onboardingStepTwoPage.OnboardingStepTwoPage;
 import org.assertj.core.api.SoftAssertions;
@@ -18,6 +19,7 @@ public class OnboardingStepOnePage extends OnboardingStepOnePageLocators {
         log.info("Onboarding - Step one page is displayed.");
     }
 
+    @Step("Tap on forward button")
     public OnboardingStepTwoPage tapOnForwardButton() {
         mobile.tapOnElement(forwardButton, 15);
         log.info("Forward button has been tapped.");
@@ -25,6 +27,7 @@ public class OnboardingStepOnePage extends OnboardingStepOnePageLocators {
         return new OnboardingStepTwoPage();
     }
 
+    @Step("Swipe to onboarding step two page")
     public OnboardingStepTwoPage swipeToOnboardingStepTwoPage() {
         mobile.swipeRight(600);
         log.info("Swiped to 'Onboarding step two' page.");
@@ -32,6 +35,7 @@ public class OnboardingStepOnePage extends OnboardingStepOnePageLocators {
         return new OnboardingStepTwoPage();
     }
 
+    @Step("Tap on add language button")
     public AddNewLanguagePage tapOnAddLanguageButton() {
         mobile.tapOnElement(addLanguageButton, 15);
         log.info("Add/edit language button has been tapped.");
@@ -39,6 +43,7 @@ public class OnboardingStepOnePage extends OnboardingStepOnePageLocators {
         return new AddNewLanguagePage();
     }
 
+    @Step("Check description")
     public OnboardingStepOnePage checkDescription() {
         String actualTitle = get.getValueFromElement(title, "text").replaceAll("\n", "");
         String expectedTitle = "Wolna encyklopedia...w prawie 300 językach";
@@ -54,6 +59,7 @@ public class OnboardingStepOnePage extends OnboardingStepOnePageLocators {
         return this;
     }
 
+    @Step("Check languages on device before change")
     public OnboardingStepOnePage checkLanguagesOnDeviceBeforeChange(WikiAlphaModel wikiAlphaModel) {
         List<String> expectedLanguages = getExpectedLanguagesBeforeChangeFromDataProvider(wikiAlphaModel);
         checkLanguagesOnDevice(expectedLanguages, "before");
@@ -61,6 +67,7 @@ public class OnboardingStepOnePage extends OnboardingStepOnePageLocators {
         return this;
     }
 
+    @Step("Check languages on device after change")
     public OnboardingStepOnePage checkLanguagesOnDeviceAfterChange(WikiAlphaModel wikiAlphaModel) {
         List<String> expectedLanguages = getExpectedLanguagesAfterChangeFromDataProvider(wikiAlphaModel);
         checkLanguagesOnDevice(expectedLanguages, "after");
@@ -68,7 +75,7 @@ public class OnboardingStepOnePage extends OnboardingStepOnePageLocators {
         return this;
     }
 
-    public void checkLanguagesOnDevice(List<String> expectedLanguages, String stage) {
+    private void checkLanguagesOnDevice(List<String> expectedLanguages, String stage) {
         By languageLocator = By.xpath("//android.widget.TextView[@resource-id = 'org.wikipedia.alpha:id/option_label']");
         check.isNumberOfElementsEqualTo(languageLocator, expectedLanguages.size(), 50, 15);
         log.info("Languages {} change count meets expectation.", stage);
