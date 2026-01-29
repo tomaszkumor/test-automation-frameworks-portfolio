@@ -178,9 +178,6 @@ public class TipKiller extends BasePageFactory {
         };
     }
 
-    //TODO: dodaj stepy na allure dla calego projektu
-    //TODO: zmien nazwe projektu
-    //TODO: Usun nieuzywane klasy z projektu Web
     //TODO: ogarnij plik readme
     //TODO: zrob projekt publicznym
 }
