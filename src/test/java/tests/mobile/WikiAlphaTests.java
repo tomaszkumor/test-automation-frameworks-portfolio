@@ -3,6 +3,7 @@ package tests.mobile;
 import baseTest.BaseTest;
 import dataProviders.dataProviders.mobile.WikiAlphaDP;
 import dataProviders.dataProvidersModels.mobile.wikiAlphaModel.WikiAlphaModel;
+import io.qameta.allure.Description;
 import listeners.DriverListener;
 import models.mobile.menu.discoverPage.DiscoverPage;
 import models.mobile.menu.moreModal.yearInReviewPage.yearInReviewOnboardingPage.YearInReviewOnboardingPage;
@@ -14,6 +15,7 @@ import utils.retryAnalyzer.RetryAnalyzer;
 @Listeners(value = {DriverListener.class})
 public class WikiAlphaTests extends BaseTest {
     @Test(dataProvider = "commonDP", dataProviderClass = WikiAlphaDP.class, retryAnalyzer = RetryAnalyzer.class)
+    @Description("Mobile. Complete onboarding process with new language selection")
     public void completeOnboardingProcessWithNewLanguageSelection(WikiAlphaModel wikiAlphaModel) {
         new OnboardingStepOnePage()
                 .checkDescription()
@@ -37,6 +39,7 @@ public class WikiAlphaTests extends BaseTest {
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
+    @Description("Mobile. Complete year in review onboarding process")
     public void completeYearInReviewOnboardingProcess() {
         new YearInReviewOnboardingPage()
                 .tapOnGetStartedButton()
@@ -58,6 +61,7 @@ public class WikiAlphaTests extends BaseTest {
     }
 
     @Test(dataProvider = "commonDP", dataProviderClass = WikiAlphaDP.class, retryAnalyzer = RetryAnalyzer.class)
+    @Description("Mobile. Change theme to dark mode")
     public void changeThemeToDarkMode(WikiAlphaModel wikiAlphaModel) {
         new DiscoverPage()
                 .tapOnTabMore()
@@ -69,6 +73,7 @@ public class WikiAlphaTests extends BaseTest {
     }
 
     @Test(dataProvider = "discoverySearchDP", dataProviderClass = WikiAlphaDP.class, retryAnalyzer = RetryAnalyzer.class)
+    @Description("Mobile. Search through discovery page and add result to saved")
     public void searchThroughDiscoveryPageAndAddResultToSaved(WikiAlphaModel wikiAlphaModel) {
         new DiscoverPage()
                 .tapOnSearchInput()
@@ -78,6 +83,7 @@ public class WikiAlphaTests extends BaseTest {
     }
 
     @Test(dataProvider = "savedDP", dataProviderClass = WikiAlphaDP.class, retryAnalyzer = RetryAnalyzer.class)
+    @Description("Mobile. Check if specific results were added to list in saved page")
     public void checkIfSpecificResultsWereAddedToListInSavedPage(WikiAlphaModel wikiAlphaModel) {
         new DiscoverPage()
                 .tapOnTabSaved()
@@ -86,6 +92,7 @@ public class WikiAlphaTests extends BaseTest {
     }
 
     @Test(dataProvider = "searchDP", dataProviderClass = WikiAlphaDP.class, retryAnalyzer = RetryAnalyzer.class)
+    @Description("Mobile. Search through search page and find item in contents")
     public void searchThroughSearchPageAndFindItemInContents(WikiAlphaModel wikiAlphaModel) {
         new DiscoverPage()
                 .tapOnTabSearch()
@@ -97,6 +104,7 @@ public class WikiAlphaTests extends BaseTest {
     }
 
     @Test(retryAnalyzer = RetryAnalyzer.class)
+    @Description("Mobile. Get through discover made for you")
     public void getThroughDiscoverMadeForYou() {
         new DiscoverPage()
                 .tapOnTabSaved()
@@ -106,6 +114,7 @@ public class WikiAlphaTests extends BaseTest {
     }
 
     @Test(dataProvider = "savedDP", dataProviderClass = WikiAlphaDP.class, retryAnalyzer = RetryAnalyzer.class)
+    @Description("Mobile. Change discover made for you settings")
     public void changeDiscoverMadeForYouSettings(WikiAlphaModel wikiAlphaModel) {
         new DiscoverPage()
                 .tapOnTabSaved()
