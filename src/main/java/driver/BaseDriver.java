@@ -18,7 +18,7 @@ import java.net.URL;
 import static utils.logger.Log4J.log;
 
 public class BaseDriver {
-    public static BaseDriver webDriverInstance;
+    private static BaseDriver webDriverInstance;
     private static final ThreadLocal<WebDriver> DRIVER_THREAD_LOCAL = new ThreadLocal<>();
 
     public static BaseDriver getWebDriver() {
