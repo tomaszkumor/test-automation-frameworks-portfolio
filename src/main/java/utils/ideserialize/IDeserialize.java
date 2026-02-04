@@ -1,4 +1,4 @@
-package utils.apiBodyComparer;
+package utils.ideserialize;
 
 import com.google.gson.Gson;
 

@@ -33,6 +33,7 @@ public class BaseTest {
                 getWebDriver().setDriver();
                 getWebDriver().getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(25));
             }
+            case "api" -> {}
             default -> throw new IllegalArgumentException("Unsupported platform");
         }
     }

@@ -13,7 +13,6 @@ import models.api.pojo.POJOOrder;
 import models.api.pojo.POJOPet;
 import models.api.pojo.POJOUser;
 import org.testng.annotations.Test;
-import utils.apiBodyComparer.ApiBodyComparer;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -30,7 +29,7 @@ public class PetStoreTest extends BaseTest {
     public void sendPostRequestUserAndCheckResponse(PetStoreModel petStoreModel) {
         POJOApiResponse actualResponse = new EndpointUser().sendPostRequestUser(petStoreModel).getApiResponsePOJO();
         POJOApiResponse expectedResponse = new POJOApiResponse().deserialize(petStoreModel.getApiResponseBodyPath(), POJOApiResponse.class);
-        assertThat(ApiBodyComparer.getPrettyLog(actualResponse)).isEqualTo(ApiBodyComparer.getPrettyLog(expectedResponse));
+        assertThat(actualResponse).isEqualTo(expectedResponse);
     }
 
     @Test(dataProvider = "sendGetRequestUserDP", dataProviderClass = PetStoreDP.class)
@@ -38,7 +37,7 @@ public class PetStoreTest extends BaseTest {
     public void sendGetRequestUserAndCheckResponse(PetStoreModel petStoreModel) {
         POJOUser actualResponse = new EndpointUser().sendGetRequestUser(petStoreModel).getUserPOJO();
         POJOUser expectedResponse = new POJOUser().deserialize(petStoreModel.getApiResponseBodyPath(), POJOUser.class);
-        assertThat(ApiBodyComparer.getPrettyLog(actualResponse)).isEqualTo(ApiBodyComparer.getPrettyLog(expectedResponse));
+        assertThat(actualResponse).isEqualTo(expectedResponse);
     }
 
     @Test(dataProvider = "sendPutRequestUserDP", dataProviderClass = PetStoreDP.class)
@@ -74,7 +73,7 @@ public class PetStoreTest extends BaseTest {
     public void sendGetRequestPetFindByIdAndCheckResponse(PetStoreModel petStoreModel) {
         POJOPet actualResponse = new EndpointPet().sendGetRequestPetFindById(petStoreModel).getPetPOJO();
         POJOPet expectedResponse = new POJOPet().deserialize(petStoreModel.getApiResponseBodyPath(), POJOPet.class);
-        assertThat(ApiBodyComparer.getPrettyLog(actualResponse)).isEqualTo(ApiBodyComparer.getPrettyLog(expectedResponse));
+        assertThat(actualResponse).isEqualTo(expectedResponse);
     }
 
     @Test(dataProvider = "sendPutRequestPetDP", dataProviderClass = PetStoreDP.class)
@@ -110,7 +109,7 @@ public class PetStoreTest extends BaseTest {
     public void sendGetRequestStoreOrderAndCheckResponse(PetStoreModel petStoreModel) {
         POJOOrder actualResponse = new EndpointStore().sendGetRequestStoreOrder(petStoreModel).getOrderPOJO();
         POJOOrder expectedResponse = new POJOOrder().deserialize(petStoreModel.getApiResponseBodyPath(), POJOOrder.class).replaceShipDate(actualResponse);
-        assertThat(ApiBodyComparer.getPrettyLog(actualResponse)).isEqualTo(ApiBodyComparer.getPrettyLog(expectedResponse));
+        assertThat(actualResponse).isEqualTo(expectedResponse);
     }
 
     @Test(dataProvider = "sendDeleteRequestStoreOrderDP", dataProviderClass = PetStoreDP.class)

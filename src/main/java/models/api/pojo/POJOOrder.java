@@ -1,7 +1,7 @@
 package models.api.pojo;
 
 import lombok.Data;
-import utils.apiBodyComparer.IDeserialize;
+import utils.ideserialize.IDeserialize;
 
 @Data
 public class POJOOrder implements IDeserialize<POJOOrder> {
