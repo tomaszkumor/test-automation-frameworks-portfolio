@@ -8,8 +8,6 @@ This repository contains a comprehensive test automation framework built in Java
 
 This framework is intended as a **portfolio project** demonstrating practical knowledge of test automation architecture, design patterns, configuration management, and scalability considerations commonly used in real-world QA Automation projects.
 
----
-
 ## How to run
 
 ### Clone repository:
@@ -75,8 +73,6 @@ mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/mobile/WIKI_ALPH
 allure serve
 ```
 
----
-
 ## Technology stack
 
 - **Language:** Java 21
@@ -88,8 +84,6 @@ allure serve
 - **Reporting:** Allure
 - **Logging:** Log4j2
 - **CI/CD readiness:** Yes
-
----
 
 ## Design patterns & architectural concepts
 
@@ -129,8 +123,6 @@ allure serve
 > **Note:**  
 > Mobile tests are executed on physical devices only. Simulators were intentionally not used due to local hardware limitations.
 
----
-
 ## Configuration management
 
 The framework uses **YAML-based configuration files** for runtime control.
@@ -143,8 +135,6 @@ The framework uses **YAML-based configuration files** for runtime control.
 - Environment-specific data (URLs, credentials)
 
 No Maven or TestNG parameters are required — all runtime behavior is driven via configuration files.
-
----
 
 ## Project structure:
 
@@ -185,7 +175,6 @@ src/
              │     └── web
              └── log4j2.xml
 ```
----
 
 ## Reporting & logging
 
@@ -194,20 +183,14 @@ src/
 - Automatic retry mechanism for flaky tests
 - TestNG listeners integrated
 
----
-
 ## Web tests independence
 
 Web and mobile tests are fully independent.
-
----
 
 ## API tests independence
 
 API tests may follow ordered execution when validating business flows
   (e.g. resource creation and cleanup).
-
----
 
 ## Mobile tests independence & E2E scenario constraints
 
@@ -234,8 +217,6 @@ While this introduces a dependency between tests within a scenario,
 the decision is deliberate and documented, reflecting a real-world trade-off
 between test isolation and production data safety.
 
----
-
 ## Mobile platform support
 
 The framework architecture supports both Android and iOS platforms and
@@ -249,16 +230,12 @@ All mobile abstractions, driver management, and Page Object models are
 implemented in a platform-agnostic way, allowing iOS support to be enabled
 with minimal configuration and platform-specific locators.
 
----
-
 ## Extensibility & future improvements
 
 Possible extensions:
 - Maven profiles for test selection
 - CI pipeline integration (GitHub Actions / Jenkins)
 - Enhanced API authentication support
-
----
 
 ## Disclaimer
 
@@ -273,5 +250,3 @@ design patterns, configuration management, and best practices**, not to provide
 fully passing tests against the current live PHPTravels site.
 
 All configuration values, URLs, and credentials are mock or non-sensitive.
-
----
