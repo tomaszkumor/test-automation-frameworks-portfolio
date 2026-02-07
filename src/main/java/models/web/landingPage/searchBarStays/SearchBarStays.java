@@ -1,17 +1,16 @@
-package models.web.landingPage.searchBarHotels;
+package models.web.landingPage.searchBarStays;
 
 import constants.common.Arrow;
 import constants.common.Date;
-import constants.hotelsPage.Accommodation;
-import constants.hotelsPage.CheckType;
+import constants.staysPage.Accommodation;
+import constants.staysPage.CheckType;
 import dataProviders.dataProvidersModels.web.commonModels.DateModel;
 import dataProviders.dataProvidersModels.web.commonModels.DestinationModel;
-import dataProviders.dataProvidersModels.web.hotelsPageModels.AccommodationModel;
-import dataProviders.dataProvidersModels.web.hotelsPageModels.ChildModel;
 import dataProviders.dataProvidersModels.web.phpTravelsModel.PhpTravelsModel;
-import driver.WebProperties;
+import dataProviders.dataProvidersModels.web.staysPageModels.AccommodationModel;
+import dataProviders.dataProvidersModels.web.staysPageModels.ChildModel;
 import io.qameta.allure.Step;
-import models.web.menu.hotelsPage.hotelsSearchPage.HotelsSearchPage;
+import models.web.menu.staysPage.staysSearchPage.StaysSearchPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
@@ -24,69 +23,89 @@ import static driver.BaseDriver.getWebDriver;
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.logger.Log4J.log;
 
-public class SearchBarHotels extends SearchBarHotelsLocators {
-    public SearchBarHotels() {
+public class SearchBarStays extends SearchBarStaysLocators {
+    public SearchBarStays() {
         checkIfTabIsActive();
         checkIfSearchBarIsDisplayed();
-        log.info("Hotels search bar is displayed.");
+        log.info("Stays search bar is displayed.");
     }
 
-    @Step("Select city")
-    public SearchBarHotels selectCity(PhpTravelsModel phpTravelsModel) {
-        checkCityBeforeInput();
-        clickOnCityInput();
-        checkIfCitiesAreDisplayed();
-        findAndSelectCity(phpTravelsModel);
-        checkCityAfterInput(phpTravelsModel);
+    @Step("Select Destination or hotel name")
+    public SearchBarStays selectDestination(PhpTravelsModel phpTravelsModel) {
+        checkDestinationBeforeInput();
+        clickOnDestinationInput();
+        findAndSelectDestination(phpTravelsModel);
+        checkDestinationAfterInput(phpTravelsModel);
 
         return this;
     }
 
     @Step("Select check in date")
-    public SearchBarHotels selectCheckInDate(PhpTravelsModel phpTravelsModel) {
+    public SearchBarStays selectCheckInDate(PhpTravelsModel phpTravelsModel) {
+        clickOnDateInput(CheckType.IN);
         selectCheckInDateYear(phpTravelsModel);
         selectCheckInDateMonth(phpTravelsModel);
         selectCheckInDateDay(phpTravelsModel);
-        checkActualCheckInDate(phpTravelsModel);
+        checkCheckInDateAfterChange(phpTravelsModel);
+        scrollIntoSearchBarIfNecessary();
 
         return this;
     }
 
     @Step("Select check out date")
-    public SearchBarHotels selectCheckOutDate(PhpTravelsModel phpTravelsModel) {
+    public SearchBarStays selectCheckOutDate(PhpTravelsModel phpTravelsModel) {
+        clickOnDateInput(CheckType.OUT);
         selectCheckOutDateYear(phpTravelsModel);
         selectCheckOutDateMonth(phpTravelsModel);
         selectCheckOutDateDay(phpTravelsModel);
-        checkActualCheckOutDate(phpTravelsModel);
+        checkCheckOutDateAfterChange(phpTravelsModel);
+        scrollIntoSearchBarIfNecessary();
 
         return this;
     }
 
     @Step("Select accommodation")
-    public SearchBarHotels selectAccommodation(PhpTravelsModel phpTravelsModel) {
-        checkInitialGuestsCount();
-        checkInitialRoomsCount();
-        clickOnAccommodationInput();
+    public SearchBarStays selectAccommodation(PhpTravelsModel phpTravelsModel) {
+        checkRoomsAndGuestsCountBeforeChange();
+        clickOnAccommodationSelect();
         checkIfAccommodationWindowIsDisplayed(true);
         setRoomsNumber(phpTravelsModel);
         setAdultsNumber(phpTravelsModel);
         setChildrenNumber(phpTravelsModel);
         setChildrenAge(phpTravelsModel);
-        setNationality(phpTravelsModel);
         closeAccommodationsWindow();
         checkIfAccommodationWindowIsDisplayed(false);
-        checkGuestsCountAfterChange(phpTravelsModel);
-        checkRoomsCountAfterChange(phpTravelsModel);
+        scrollIntoSearchBarIfNecessary();
+        checkRoomsAndGuestsCountAfterChange(phpTravelsModel);
+
+        return this;
+    }
+
+    @Step("Select nationality")
+    public SearchBarStays selectNationality(PhpTravelsModel phpTravelsModel) {
+        checkNationalityBeforeChange();
+        clickOnNationalitySelect();
+        checkIfNationalityWindowIsDisplayed(true);
+        typeNationalityInSearchInput(phpTravelsModel);
+        setNationality(phpTravelsModel);
+        checkIfNationalityWindowIsDisplayed(false);
+        checkNationalityAfterChange(phpTravelsModel);
 
         return this;
     }
 
     @Step("Click on search button")
-    public HotelsSearchPage clickOnSearchButton() {
+    public StaysSearchPage clickOnSearchButton() {
         click.clickOnVisibleElement(searchButton, 15);
         log.info("Search button has been clicked.");
 
-        return new HotelsSearchPage();
+        return new StaysSearchPage();
+    }
+
+    private void typeNationalityInSearchInput(PhpTravelsModel phpTravelsModel) {
+        String nationality = getExpectedNationalityFromDataProvider(phpTravelsModel);
+        send.sendKeysToWebElementWithNoLeave(nationalityInput, nationality);
+        log.info("{} has been typed to nationality search input.", nationality);
     }
 
     private void setChildrenAge(PhpTravelsModel phpTravelsModel) {
@@ -105,7 +124,7 @@ public class SearchBarHotels extends SearchBarHotelsLocators {
                 String expectedChildNo = child.getChildNo();
                 String expectedChildAge = child.getChildAge();
 
-                By childSelectLocator = By.xpath("//ol[@id = 'append']/li[" + expectedChildNo + "]//select");
+                By childSelectLocator = By.xpath("//span[@x-text = 'childIndex + 1' and text() = '" + expectedChildNo + "']/../following-sibling::select");
                 WebElement ageSelect = getWebDriver().getDriver().findElement(childSelectLocator);
 
                 Select select = new Select(ageSelect);
@@ -119,49 +138,21 @@ public class SearchBarHotels extends SearchBarHotelsLocators {
     private void setNationality(PhpTravelsModel phpTravelsModel) {
         String nationality = getExpectedNationalityFromDataProvider(phpTravelsModel);
 
-        By nationalitySelectLocator = By.xpath("//select[@id = 'nationality']");
+        By nationalitySelectLocator = By.xpath("//div[contains(@class, 'show')]//span[@x-text = 'country.nicename' and text() = '" + nationality + "']");
         WebElement nationalitySelect = getWebDriver().getDriver().findElement(nationalitySelectLocator);
-
-        Select select = new Select(nationalitySelect);
-        select.selectByContainsVisibleText(nationality);
+        click.clickOnElement(nationalitySelect, 15);
 
         log.info("Nationality {} has been selected", nationality);
     }
 
-    private void checkGuestsCountAfterChange(PhpTravelsModel phpTravelsModel) {
-        WebElement guestsCount = accommodationDropDown.findElement(By.xpath(".//span[@class = 'guest_hotels']"));
-        String actualGuestsCount = get.getTextFromElement(guestsCount);
-        String expectedGuestsCount = getTotalExpectedCountOfGuests(phpTravelsModel);
-
-        assertThat(actualGuestsCount)
-                .as("Guests count check after change")
-                .isEqualTo(expectedGuestsCount);
-    }
-
-    private void checkRoomsCountAfterChange(PhpTravelsModel phpTravelsModel) {
-        WebElement roomsCount = accommodationDropDown.findElement(By.xpath(".//span[@class = 'roomTotal']"));
-        String actualRoomsCount = get.getTextFromElement(roomsCount);
-        String expectedRoomsCount = getExpectedRoomsCount(phpTravelsModel);
-
-        assertThat(actualRoomsCount)
-                .as("rooms count check after change")
-                .isEqualTo(expectedRoomsCount);
-    }
-
     private String getTotalExpectedCountOfGuests(PhpTravelsModel phpTravelsModel) {
         String expectedAdultsCount = getExpectedSpecificAccommodationGroupCountAfterChange(phpTravelsModel, Accommodation.ADULTS);
-        String expectedChildrenCount = getExpectedSpecificAccommodationGroupCountAfterChange(phpTravelsModel, Accommodation.CHILDS);
+        String expectedChildrenCount = getExpectedSpecificAccommodationGroupCountAfterChange(phpTravelsModel, Accommodation.CHILDREN);
 
         int expectedAdultsCountAsNumber = Integer.parseInt(expectedAdultsCount);
         int expectedChildrenCountAsNumber = Integer.parseInt(expectedChildrenCount);
 
         return String.valueOf(expectedAdultsCountAsNumber + expectedChildrenCountAsNumber);
-    }
-
-    private String getExpectedRoomsCount(PhpTravelsModel phpTravelsModel) {
-        AccommodationModel expectedAccommodation = getExpectedAccommodationFromDataProvider(phpTravelsModel);
-
-        return expectedAccommodation.getRoomsCount();
     }
 
     private void closeAccommodationsWindow() {
@@ -182,9 +173,9 @@ public class SearchBarHotels extends SearchBarHotelsLocators {
     }
 
     private void setChildrenNumber(PhpTravelsModel phpTravelsModel) {
-        checkSpecificAccommodationCountBeforeChange(Accommodation.CHILDS);
-        changeSpecificAccommodationGroupCount(phpTravelsModel, Accommodation.CHILDS);
-        checkSpecificAccommodationCountAfterChange(phpTravelsModel, Accommodation.CHILDS);
+        checkSpecificAccommodationCountBeforeChange(Accommodation.CHILDREN);
+        changeSpecificAccommodationGroupCount(phpTravelsModel, Accommodation.CHILDREN);
+        checkSpecificAccommodationCountAfterChange(phpTravelsModel, Accommodation.CHILDREN);
     }
 
     private void checkSpecificAccommodationCountBeforeChange(Accommodation accommodation) {
@@ -241,18 +232,18 @@ public class SearchBarHotels extends SearchBarHotelsLocators {
     }
 
     private By getArrowLocator(Accommodation accommodation, Arrow arrow) {
-        String arrowClass = switch (accommodation) {
-            case ROOMS -> switch (arrow) {
-                case LEFT -> "roomDec";
-                case RIGHT -> "roomInc";
-            };
-            case ADULTS, CHILDS -> switch (arrow) {
-                case LEFT -> "qtyDec";
-                case RIGHT -> "qtyInc";
-            };
+        String group = switch (accommodation) {
+            case ROOMS -> "roomsData.length";
+            case ADULTS -> "room.adults";
+            case CHILDREN -> "room.children";
         };
 
-        return By.xpath("//div[contains(@class, 'dropdown-menu') and contains(@style, 'block')]//label[contains(normalize-space(.), '" + accommodation.getAccommodationName() + "')]/..//div[@class = '" + arrowClass + "']");
+        String arrowDirection = switch (arrow) {
+            case LEFT -> "1";
+            case RIGHT -> "2";
+        };
+
+        return By.xpath("//div[contains(@class, 'show')]//span[@x-text = '" + group + "']/../button[" + arrowDirection + "]");
     }
 
     private String getExpectedSpecificAccommodationGroupCountAfterChange(PhpTravelsModel phpTravelsModel, Accommodation accommodation) {
@@ -261,95 +252,122 @@ public class SearchBarHotels extends SearchBarHotelsLocators {
         return switch (accommodation) {
             case ROOMS -> expectedAccommodation.getRoomsCount();
             case ADULTS -> expectedAccommodation.getAdultsCount();
-            case CHILDS -> expectedAccommodation.getChildrenCount();
+            case CHILDREN -> expectedAccommodation.getChildrenCount();
         };
     }
 
     private By getActualSpecificAccommodationCountLocator(Accommodation accommodation) {
-        String specificAccommodationGroupClass = switch (accommodation) {
-            case ROOMS -> "hotels_rooms";
-            case ADULTS -> "hotels_adults";
-            case CHILDS -> "hotels_childs";
+        return switch (accommodation) {
+            case ROOMS -> By.xpath("//span[@x-text = 'roomsData.length']");
+            case ADULTS -> By.xpath("//span[@x-text = 'room.adults']");
+            case CHILDREN -> By.xpath("//span[@x-text = 'room.children']");
         };
-
-        return By.xpath("//div[contains(@class, 'dropdown-menu') and contains(@style, 'block')]//following::input[@id = '" + specificAccommodationGroupClass + "']");
     }
 
     private String getActualSpecificAccommodationGroupCount(Accommodation accommodation) {
         By accommodationLocator = getActualSpecificAccommodationCountLocator(accommodation);
 
-        return get.getValueFromElement(accommodationLocator);
+        return get.getTextFromElement(accommodationLocator);
     }
 
     private String getExpectedSpecificAccommodationGroupCountBeforeChange(Accommodation accommodation) {
         return switch (accommodation) {
             case ROOMS -> "1";
             case ADULTS -> "2";
-            case CHILDS -> "0";
+            case CHILDREN -> "0";
         };
     }
 
-    private void checkIfAccommodationWindowIsDisplayed(boolean shouldBeDisplayed) {
-        By accommodationWindowLocator = By.xpath("//div[contains(@class, 'dropdown-menu') and contains(@style, 'block')]");
-        if (shouldBeDisplayed) {
-            check.isElementPresentByLocator(accommodationWindowLocator, 50, 15);
+    private void checkIfDatePickerWindowIsDisplayed(boolean shouldBeDisplayed, String destination) {
+        By datePickerWindowLocator = By.xpath("//div[@class = 'datepicker-days']/ancestor::div[contains(@class, 'datepicker') and not(contains(@class, 'hidden'))]");
+        checkIfWindowIsDisplayed(datePickerWindowLocator, destination + " date picker", shouldBeDisplayed);
+    }
 
-            WebElement accommodationWindow = getWebDriver().getDriver().findElement(accommodationWindowLocator);
-            check.isElementDisplayed(accommodationWindow, 15);
-            log.info("Accommodation window has been displayed.");
+    private void checkIfAccommodationWindowIsDisplayed(boolean shouldBeDisplayed) {
+        By accommodationWindowLocator = By.xpath("//div[@x-data = 'guestsRoomsDropdown()']//div[contains(@class, 'show')]");
+        checkIfWindowIsDisplayed(accommodationWindowLocator, "Accommodation", shouldBeDisplayed);
+    }
+
+    private void checkIfNationalityWindowIsDisplayed(boolean shouldBeDisplayed) {
+        By accommodationWindowLocator = By.xpath("//div[@x-data = 'nationalityDropdown()']//div[contains(@class, 'show')]");
+        checkIfWindowIsDisplayed(accommodationWindowLocator, "Nationality", shouldBeDisplayed);
+    }
+
+    private void checkIfWindowIsDisplayed(By windowLocator, String windowName, boolean shouldBeDisplayed) {
+        if (shouldBeDisplayed) {
+            check.isElementPresentByLocator(windowLocator, 50, 15);
+
+            WebElement window = getWebDriver().getDriver().findElement(windowLocator);
+            check.isElementDisplayed(window, 15);
+            log.info("{} window has been displayed.", windowName);
         } else {
-            check.isNumberOfElementsEqualTo(accommodationWindowLocator, 0, 50, 15);
-            log.info("Accommodation window has been closed.");
+            check.isNumberOfElementsEqualTo(windowLocator, 0, 50, 15);
+            log.info("{} window has been closed.", windowName);
         }
     }
 
-    private void clickOnAccommodationInput() {
+    private void clickOnAccommodationSelect() {
         click.clickOnElement(accommodationDropDown, 15);
         log.info("Accommodation drop down has been clicked.");
     }
 
-    private void checkInitialGuestsCount() {
-        WebElement guestsCount = accommodationDropDown.findElement(By.xpath(".//span[@class = 'guest_hotels']"));
-        String actualGuestsCount = get.getTextFromElement(guestsCount);
-        String expectedGuestsCount = "2";
+    private void clickOnNationalitySelect() {
+        click.clickOnElement(nationalityDropDown, 15);
+        log.info("Nationality drop down has been clicked.");
+    }
+
+    private void checkRoomsAndGuestsCountBeforeChange() {
+        WebElement roomsAndGuestsCount = accommodationDropDown.findElement(By.xpath(".//span[@x-text = 'getGuestText()']"));
+        String expectedGuestsCount = "2 Guests, 1 Room";
+        checkSelectValueBeforeOrAfterChange(roomsAndGuestsCount, expectedGuestsCount, "Guests and rooms count", "before");
+    }
+
+    private void checkNationalityBeforeChange() {
+        WebElement roomsAndGuestsCount = nationalityDropDown.findElement(By.xpath(".//span[@x-text = 'getSelectedName()']"));
+        String expectedGuestsCount = "Select Nationality";
+        checkSelectValueBeforeOrAfterChange(roomsAndGuestsCount, expectedGuestsCount, "Nationality", "before");
+    }
+
+    private void checkRoomsAndGuestsCountAfterChange(PhpTravelsModel phpTravelsModel) {
+        WebElement roomsAndGuestsCount = accommodationDropDown.findElement(By.xpath(".//span[@x-text = 'getGuestText()']"));
+        String expectedGuestsCount = getTotalExpectedCountOfGuests(phpTravelsModel);
+        String expectedRoomsCount = getExpectedSpecificAccommodationGroupCountAfterChange(phpTravelsModel, Accommodation.ROOMS);
+        String expectedGuestsAndRoomsCount = expectedGuestsCount.concat(" Guests, ").concat(expectedRoomsCount).concat(" Room");
+
+        checkSelectValueBeforeOrAfterChange(roomsAndGuestsCount, expectedGuestsAndRoomsCount, "Guests and rooms count", "after");
+    }
+
+    private void checkNationalityAfterChange(PhpTravelsModel phpTravelsModel) {
+        WebElement nationality = nationalityDropDown.findElement(By.xpath(".//span[@x-text = 'getSelectedName()']"));
+        String expectedNationality = getExpectedNationalityFromDataProvider(phpTravelsModel);
+        checkSelectValueBeforeOrAfterChange(nationality, expectedNationality, "Nationality", "after");
+    }
+
+    private void checkSelectValueBeforeOrAfterChange(WebElement element, String expectedValue, String valueName, String stage) {
+        String actualGuestsCount = get.getTextFromElement(element);
 
         assertThat(actualGuestsCount)
-                .as("Guests count check before change")
-                .isEqualTo(expectedGuestsCount);
+                .as(valueName + " check " + stage + " change")
+                .isEqualTo(expectedValue);
     }
 
-    private void checkInitialRoomsCount() {
-        WebElement roomsCount = accommodationDropDown.findElement(By.xpath(".//span[@class = 'roomTotal']"));
-        String actualRoomsCount = get.getTextFromElement(roomsCount);
-        String expectedRoomsCount = "1";
-
-        assertThat(actualRoomsCount)
-                .as("Rooms count check before change")
-                .isEqualTo(expectedRoomsCount);
-    }
-
-    private void checkCityAfterInput(PhpTravelsModel phpTravelsModel) {
-        String expectedCity = getExpectedCityValueAfterInput(phpTravelsModel);
-        compareCityBeforeOrAfterInput(expectedCity, citySpan, "after");
-    }
-
-    private String getExpectedCityValueAfterInput(PhpTravelsModel phpTravelsModel) {
+    private String getExpectedDestinationValueAfterInput(PhpTravelsModel phpTravelsModel) {
         DestinationModel hotelDestination = getExpectedHotelDestinationFromDataProvider(phpTravelsModel);
 
-        return getHotelDestinationName(hotelDestination);
+        return getDestinationName(hotelDestination);
     }
 
-    private void findAndSelectCity(PhpTravelsModel phpTravelsModel) {
+    private void findAndSelectDestination(PhpTravelsModel phpTravelsModel) {
         DestinationModel expectedHotelDestination = getExpectedHotelDestinationFromDataProvider(phpTravelsModel);
         String expectedHotelDestinationCityName = expectedHotelDestination.getCity();
         String expectedHotelDestinationCountryName = expectedHotelDestination.getCountry();
 
-        typeCityToInputCity(expectedHotelDestinationCityName);
-        clickOnCityButton(expectedHotelDestinationCityName, expectedHotelDestinationCountryName);
+        typeDestinationToDestinationInput(expectedHotelDestinationCityName);
+        clickOnDestinationButton(expectedHotelDestinationCityName, expectedHotelDestinationCountryName);
     }
 
-    private void clickOnCityButton(String expectedHotelDestinationCityName, String expectedHotelDestinationCountryName) {
-        By cityLocator = By.xpath("//strong[contains(text(), '" + expectedHotelDestinationCountryName + "')]/ancestor::li[contains(text(), '" + expectedHotelDestinationCityName + "')]/..");
+    private void clickOnDestinationButton(String expectedHotelDestinationCityName, String expectedHotelDestinationCountryName) {
+        By cityLocator = By.xpath("//span[@x-text = \"d.cityname + ', ' + d.countryname\" and text() = '" + expectedHotelDestinationCityName + ", " + expectedHotelDestinationCountryName + "']");
         check.isNumberOfElementsEqualTo(cityLocator, 1, 50, 15);
 
         WebElement cityButton = getWebDriver().getDriver().findElement(cityLocator);
@@ -358,185 +376,81 @@ public class SearchBarHotels extends SearchBarHotelsLocators {
         log.info("{},{} has been selected.", expectedHotelDestinationCityName, expectedHotelDestinationCountryName);
     }
 
-    private void typeCityToInputCity(String expectedHotelDestinationCityName) {
-        check.isElementEnabled(cityInput, 15);
-        send.sendKeysToWebElementWithNoLeave(cityInput, expectedHotelDestinationCityName);
-        log.info("{} has been typed to city input.", expectedHotelDestinationCityName);
+    private void typeDestinationToDestinationInput(String expectedHotelDestinationCityName) {
+        check.isElementEnabled(destinationInput, 15);
+        send.sendKeysToWebElementWithNoLeave(destinationInput, expectedHotelDestinationCityName);
+        log.info("{} has been typed to destination input.", expectedHotelDestinationCityName);
     }
 
-    private String getHotelDestinationName(DestinationModel hotelDestination) {
+    private String getDestinationName(DestinationModel hotelDestination) {
         String city = hotelDestination.getCity();
         String country = hotelDestination.getCountry();
 
-        return city.concat(" ").concat(country);
+        return city.concat(", ").concat(city).concat(", ").concat(country);
     }
 
-    private void checkIfCitiesAreDisplayed() {
-        check.isElementDisplayed(citiesContainer, 15);
-        By cityLocator = By.xpath("//div[@class = 'most--popular-hotels']/div");
-        check.isNumberOfElementsGreaterThan(cityLocator, 1, 50, 10);
+    private void checkDestinationBeforeInput() {
+        String expectedDestination = "";
+        compareDestinationBeforeOrAfterInput(expectedDestination, destinationInput, "before");
     }
 
-    private void checkCityBeforeInput() {
-        String browser = WebProperties.getBrowser();
-        String expectedPhrase = switch (browser) {
-            case "chrome", "firefox" -> "Search By City";
-            case "safari" -> "Search by City";
-            default -> null;
-        };
-
-        compareCityBeforeOrAfterInput(expectedPhrase, citySpan, "before");
+    private void checkDestinationAfterInput(PhpTravelsModel phpTravelsModel) {
+        String expectedDestination = getExpectedDestinationValueAfterInput(phpTravelsModel);
+        compareDestinationBeforeOrAfterInput(expectedDestination, destinationInput, "after");
     }
 
-    private void compareCityBeforeOrAfterInput(String expectedLocationValue, WebElement element, String inputStage) {
-        String actualLocationValue = get.getTextFromElement(element).trim();
+    private void compareDestinationBeforeOrAfterInput(String expectedLocationValue, WebElement element, String inputStage) {
+        String actualLocationValue = get.getValueFromElement(element).trim();
 
         assertThat(actualLocationValue)
-                .as("City check " + inputStage + " input")
+                .as("Destination check " + inputStage + " input")
                 .isEqualTo(expectedLocationValue);
 
-        log.info("City {} input value meets expected value.", inputStage);
+        log.info("Destination {} input value meets expected value.", inputStage);
     }
 
-    private void clickOnCityInput() {
-        click.clickOnEnabledElement(citySpan, 15);
-        log.info("City input has been clicked.");
+    private void clickOnDestinationInput() {
+        click.clickOnEnabledElement(destinationInput, 15);
+        log.info("Destination input has been clicked.");
     }
 
     private void selectCheckInDateYear(PhpTravelsModel phpTravelsModel) {
-        clickOnDateInput(CheckType.IN);
         checkIfDatePickerWindowIsDisplayed(true, "Check in");
         clickOnDatePickerHeader(Date.YEAR);
         selectSpecificDate(phpTravelsModel, CheckType.IN, Date.YEAR);
-        closeCheckOutDatePickerWindowIfNecessary();
-        checkIfDatePickerWindowIsDisplayed(false, "Check in");
+    }
+
+    private void selectCheckOutDateYear(PhpTravelsModel phpTravelsModel) {
+        checkIfDatePickerWindowIsDisplayed(true, "Check out");
+        clickOnDatePickerHeader(Date.YEAR);
+        selectSpecificDate(phpTravelsModel, CheckType.OUT, Date.YEAR);
     }
 
     private void selectCheckInDateMonth(PhpTravelsModel phpTravelsModel) {
-        clickOnDateInput(CheckType.IN);
-        checkIfDatePickerWindowIsDisplayed(true, "Check in");
-        clickOnDatePickerHeader(Date.MONTH);
         selectSpecificDate(phpTravelsModel, CheckType.IN, Date.MONTH);
-        closeCheckOutDatePickerWindowIfNecessary();
-        checkIfDatePickerWindowIsDisplayed(false, "Check in");
+    }
+
+    private void selectCheckOutDateMonth(PhpTravelsModel phpTravelsModel) {
+        selectSpecificDate(phpTravelsModel, CheckType.OUT, Date.MONTH);
     }
 
     private void selectCheckInDateDay(PhpTravelsModel phpTravelsModel) {
-        clickOnDateInput(CheckType.IN);
-        checkIfDatePickerWindowIsDisplayed(true, "Check in");
         selectSpecificDate(phpTravelsModel, CheckType.IN, Date.DAY);
         closeCheckOutDatePickerWindowIfNecessary();
         checkIfDatePickerWindowIsDisplayed(false, "Check in");
     }
 
-    private void selectCheckOutDateYear(PhpTravelsModel phpTravelsModel) {
-        clickOnDateInput(CheckType.OUT);
-        checkIfDatePickerWindowIsDisplayed(true, "Check out");
-        clickOnDatePickerHeader(Date.YEAR);
-        selectSpecificDate(phpTravelsModel, CheckType.OUT, Date.YEAR);
-        checkIfDatePickerWindowIsDisplayed(false, "Check out");
-    }
-
-    private void selectCheckOutDateMonth(PhpTravelsModel phpTravelsModel) {
-        clickOnDateInput(CheckType.OUT);
-        checkIfDatePickerWindowIsDisplayed(true, "Check out");
-        clickOnDatePickerHeader(Date.MONTH);
-        selectSpecificDate(phpTravelsModel, CheckType.OUT, Date.MONTH);
-        checkIfDatePickerWindowIsDisplayed(false, "Check out");
-    }
-
     private void selectCheckOutDateDay(PhpTravelsModel phpTravelsModel) {
-        clickOnDateInput(CheckType.OUT);
-        checkIfDatePickerWindowIsDisplayed(true, "Check out");
         selectSpecificDate(phpTravelsModel, CheckType.OUT, Date.DAY);
         checkIfDatePickerWindowIsDisplayed(false, "Check out");
     }
 
-    private void checkActualCheckInDate(PhpTravelsModel phpTravelsModel) {
+    private void checkCheckInDateAfterChange(PhpTravelsModel phpTravelsModel) {
         checkActualDate(phpTravelsModel, CheckType.IN);
     }
 
-    private void checkActualCheckOutDate(PhpTravelsModel phpTravelsModel) {
+    private void checkCheckOutDateAfterChange(PhpTravelsModel phpTravelsModel) {
         checkActualDate(phpTravelsModel, CheckType.OUT);
-    }
-
-    private void clickOnDateInput(CheckType checkType) {
-        By locator = switch (checkType) {
-            case IN -> By.xpath("//input[@id = 'checkin']");
-            case OUT -> By.xpath("//input[@id = 'checkout']");
-        };
-
-        check.isElementPresentByLocator(locator, 10);
-
-        switch (checkType) {
-            case IN -> click.clickOnEnabledElement(checkInDateInput, 15);
-            case OUT -> click.clickOnEnabledElement(checkOutDateInput, 15);
-        }
-
-        log.info("{} date picker input has been clicked.", checkType.getCheckTypeName());
-    }
-
-    private void checkIfDatePickerWindowIsDisplayed(boolean shouldBeDisplayed, String destination) {
-        By datePickerWindowLocator = By.xpath("//div[@class = 'datepicker dropdown-menu' and contains(@style, 'block')]");
-        if (shouldBeDisplayed) {
-            check.isElementPresentByLocator(datePickerWindowLocator, 50, 15);
-
-            WebElement datePickerWindow = getWebDriver().getDriver().findElement(datePickerWindowLocator);
-            check.isElementDisplayed(datePickerWindow, 15);
-            log.info("{} date picker window has been displayed.", destination);
-        } else {
-            check.isNumberOfElementsEqualTo(datePickerWindowLocator, 0, 50, 15);
-            log.info("{} date picker window has been closed.", destination);
-        }
-    }
-
-    private void clickOnDatePickerHeader(Date date) {
-        int iterator = switch (date) {
-            case YEAR -> 2;
-            case MONTH -> 1;
-            default -> 0;
-        };
-
-        By datePickerWindowHeaderLocator = By.xpath("//div[@class = 'datepicker dropdown-menu' and contains(@style, 'block')]/div[contains(@style, 'block')]//th[@class = 'switch']");
-        for (int i = 0; i < iterator; i++) {
-            check.isNumberOfElementsEqualTo(datePickerWindowHeaderLocator, 1, 5);
-            WebElement datePickerWindowHeader = getWebDriver().getDriver().findElement(datePickerWindowHeaderLocator);
-            click.clickOnVisibleElement(datePickerWindowHeader, 15);
-
-            log.info("Date picker header has been clicked.");
-        }
-    }
-
-    private void selectSpecificDate(PhpTravelsModel phpTravelsModel, CheckType checkType, Date date) {
-        DateModel expectedDate = getExpectedDateFromDataProvider(phpTravelsModel, checkType);
-
-        String specificDate = switch (date) {
-            case YEAR -> expectedDate.getYear();
-            case MONTH -> expectedDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
-            case DAY -> {
-                String day = expectedDate.getDay();
-                yield (day.length() == 2 && day.startsWith("0")) ? day.substring(1) : day;
-            }
-        };
-
-        By dateLocator = switch (date) {
-            case YEAR, MONTH ->
-                    By.xpath("//div[@class = 'datepicker dropdown-menu' and contains(@style, 'block')]/div[contains(@style, 'block')]//tbody//span[text() = '" + specificDate + "']");
-            case DAY ->
-                    By.xpath("//div[@class = 'datepicker dropdown-menu' and contains(@style, 'block')]/div[contains(@style, 'block')]//tbody//td[@class = 'day ' and text() = '" + specificDate + "']");
-        };
-
-        WebElement dateButton = getWebDriver().getDriver().findElement(dateLocator);
-        click.clickOnVisibleElement(dateButton, 15);
-        log.info("{} date: {} {} has been clicked.", checkType.getCheckTypeName(), date.getName(), specificDate);
-    }
-
-    private void closeCheckOutDatePickerWindowIfNecessary() {
-        By datePickerWindowLocator = By.xpath("//div[@class = 'datepicker dropdown-menu' and contains(@style, 'block')]");
-        if (check.isElementPresentByLocator(datePickerWindowLocator, 1)) {
-            WebElement element = getWebDriver().getDriver().findElement(By.xpath("//body"));
-            click.clickOnElement(element, 5);
-        }
     }
 
     private void checkActualDate(PhpTravelsModel phpTravelsModel, CheckType checkType) {
@@ -557,39 +471,121 @@ public class SearchBarHotels extends SearchBarHotelsLocators {
                 .isEqualTo(expectedDateAsString);
     }
 
+    private void clickOnDateInput(CheckType checkType) {
+        By locator = switch (checkType) {
+            case IN -> By.xpath("//input[@name = 'checkin_date']");
+            case OUT -> By.xpath("//input[@name = 'checkout_date']");
+        };
+
+        check.isElementPresentByLocator(locator, 10);
+
+        switch (checkType) {
+            case IN -> click.clickOnEnabledElement(checkInDateInput, 15);
+            case OUT -> click.clickOnEnabledElement(checkOutDateInput, 15);
+        }
+
+        log.info("{} date picker input has been clicked.", checkType.getCheckTypeName());
+    }
+
+    private void clickOnDatePickerHeader(Date date) {
+        int iterator = switch (date) {
+            case YEAR -> 2;
+            case MONTH -> 1;
+            default -> 0;
+        };
+
+        for (int i = 0; i < iterator; i++) {
+            By datePickerWindowHeaderLocator = getDatePickerWindowHeaderLocator(i);
+            check.isNumberOfElementsEqualTo(datePickerWindowHeaderLocator, 1, 5);
+            WebElement datePickerWindowHeader = getWebDriver().getDriver().findElement(datePickerWindowHeaderLocator);
+            click.clickOnVisibleElement(datePickerWindowHeader, 15);
+
+            log.info("Date picker header has been clicked.");
+        }
+    }
+
+    private By getDatePickerWindowHeaderLocator(int i) {
+        String datePickerHeader = switch (i) {
+            case 0 -> "days";
+            case 1 -> "months";
+            default -> null;
+        };
+
+        return By.xpath("//div[@class = 'datepicker-" + datePickerHeader + "']/ancestor::div[contains(@class, 'datepicker') and not(contains(@class, 'hidden'))]/div[@class = 'datepicker-" + datePickerHeader + "']//th[contains(@class, 'switch')]");
+    }
+
+    private void selectSpecificDate(PhpTravelsModel phpTravelsModel, CheckType checkType, Date date) {
+        DateModel expectedDate = getExpectedDateFromDataProvider(phpTravelsModel, checkType);
+
+        String specificDate = switch (date) {
+            case YEAR -> expectedDate.getYear();
+            case MONTH -> expectedDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+            case DAY -> {
+                String day = expectedDate.getDay();
+                yield (day.length() == 2 && day.startsWith("0")) ? day.substring(1) : day;
+            }
+        };
+
+        By dateLocator = switch (date) {
+            case YEAR ->
+                    By.xpath("//div[@class = 'datepicker-years']/ancestor::div[contains(@class, 'datepicker') and not(contains(@class, 'hidden'))]/div[@class = 'datepicker-years']//span[text() = '" + specificDate + "']");
+            case MONTH ->
+                    By.xpath("//div[@class = 'datepicker-months']/ancestor::div[contains(@class, 'datepicker') and not(contains(@class, 'hidden'))]/div[@class = 'datepicker-months']//span[text() = '" + specificDate + "']");
+            case DAY ->
+                    By.xpath("//div[@class = 'datepicker-days']/ancestor::div[contains(@class, 'datepicker') and not(contains(@class, 'hidden'))]/div[@class = 'datepicker-days']//div[text() = '" + specificDate + "' and not(contains(@class, 'old'))]");
+        };
+
+        WebElement dateButton = getWebDriver().getDriver().findElement(dateLocator);
+        browser.scrollIntoView(dateButton);
+        click.clickOnVisibleElement(dateButton, 15);
+        log.info("{} date: {} {} has been clicked.", checkType.getCheckTypeName(), date.getName(), specificDate);
+    }
+
+    private void closeCheckOutDatePickerWindowIfNecessary() {
+        By datePickerWindowLocator = By.xpath("//div[@class = 'datepicker-days']/ancestor::div[contains(@class, 'datepicker') and not(contains(@class, 'hidden'))]");
+        if (check.isElementPresentByLocator(datePickerWindowLocator, 1)) {
+            WebElement element = getWebDriver().getDriver().findElement(By.xpath("//body"));
+            click.clickOnElement(element, 5);
+        }
+    }
+
     private DateModel getExpectedDateFromDataProvider(PhpTravelsModel phpTravelsModel, CheckType checkType) {
         return switch (checkType) {
-            case IN -> phpTravelsModel.getHotelsPageModel().getExpectedCheckInDate();
-            case OUT -> phpTravelsModel.getHotelsPageModel().getExpectedCheckOutDate();
+            case IN -> phpTravelsModel.getStaysPageModel().getExpectedCheckInDate();
+            case OUT -> phpTravelsModel.getStaysPageModel().getExpectedCheckOutDate();
         };
     }
 
+    private void scrollIntoSearchBarIfNecessary() {
+        browser.scrollIntoView(h1);
+    }
+
     private AccommodationModel getExpectedAccommodationFromDataProvider(PhpTravelsModel phpTravelsModel) {
-        return phpTravelsModel.getHotelsPageModel().getExpectedAccommodation();
+        return phpTravelsModel.getStaysPageModel().getExpectedAccommodation();
     }
 
     private List<ChildModel> getExpectedChildrenFromDataProvider(PhpTravelsModel phpTravelsModel) {
-        return phpTravelsModel.getHotelsPageModel().getExpectedChildren();
+        return phpTravelsModel.getStaysPageModel().getExpectedChildren();
     }
 
     private DestinationModel getExpectedHotelDestinationFromDataProvider(PhpTravelsModel phpTravelsModel) {
-        return phpTravelsModel.getHotelsPageModel().getExpectedDestination();
+        return phpTravelsModel.getStaysPageModel().getExpectedDestination();
     }
 
     private String getExpectedNationalityFromDataProvider(PhpTravelsModel phpTravelsModel) {
-        return phpTravelsModel.getHotelsPageModel().getExpectedNationality();
+        return phpTravelsModel.getStaysPageModel().getExpectedNationality();
     }
 
     private void checkIfTabIsActive() {
-        assertThat(check.isAttributeEqualTo(hotelsTab, "aria-selected", "true", 50, 5))
-                .as("Hotels tab activity check")
+        assertThat(check.isAttributePresent(staysTab, "class", "text-primary", 50, 5))
+                .as("Stays tab activity check")
                 .isTrue();
 
-        log.info("Hotels tab is an active tab.");
+        log.info("Stays tab is an active tab.");
     }
 
     private void checkIfSearchBarIsDisplayed() {
-        check.isElementDisplayed(hotelsSearchBar, 15);
-        log.info("Hotels search bar has been displayed");
+        check.isElementDisplayed(staysTab, 15);
+        log.info("Stays search bar has been displayed.");
     }
 }

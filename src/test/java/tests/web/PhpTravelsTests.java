@@ -26,41 +26,16 @@ public class PhpTravelsTests extends BaseTest {
                 .clickOnSearchButton();
     }
 
-    @Test(dataProvider = "searchForHotels", dataProviderClass = LandingPageDP.class, retryAnalyzer = RetryAnalyzer.class)
-    @Description("Web. Search for hotels via landing page search bar")
-    public void searchForHotels(PhpTravelsModel phpTravelsModel) {
+    @Test(dataProvider = "searchForStays", dataProviderClass = LandingPageDP.class, retryAnalyzer = RetryAnalyzer.class)
+    @Description("Web. Search for stays via landing page search bar")
+    public void searchForStays(PhpTravelsModel phpTravelsModel) {
         new LandingPage()
-                .clickOnHotelsTab()
-                .selectCity(phpTravelsModel)
+                .clickOnStaysTab()
+                .selectDestination(phpTravelsModel)
                 .selectCheckInDate(phpTravelsModel)
                 .selectCheckOutDate(phpTravelsModel)
                 .selectAccommodation(phpTravelsModel)
-                .clickOnSearchButton();
-    }
-
-    @Test(dataProvider = "searchForTours", dataProviderClass = LandingPageDP.class, retryAnalyzer = RetryAnalyzer.class)
-    @Description("Web. Search for tours via landing page search bar")
-    public void searchForTours(PhpTravelsModel phpTravelsModel) {
-        new LandingPage()
-                .clickOnToursTab()
-                .selectCity(phpTravelsModel)
-                .selectDate(phpTravelsModel)
-                .selectTravellers(phpTravelsModel)
-                .clickOnSearchButton();
-    }
-
-    @Test(dataProvider = "searchForCars", dataProviderClass = LandingPageDP.class, retryAnalyzer = RetryAnalyzer.class)
-    @Description("Web. Search for cars via landing page search bar")
-    public void searchForCars(PhpTravelsModel phpTravelsModel) {
-        new LandingPage()
-                .clickOnCarsTab()
-                .selectDepartureAirport(phpTravelsModel)
-                .selectArrivalCity(phpTravelsModel)
-                .selectPickUpDate(phpTravelsModel)
-                .selectPickUpTime(phpTravelsModel)
-                .selectDropOffDate(phpTravelsModel)
-                .selectDropOffTime(phpTravelsModel)
-                .selectTravellers(phpTravelsModel)
+                .selectNationality(phpTravelsModel)
                 .clickOnSearchButton();
     }
 
@@ -74,6 +49,34 @@ public class PhpTravelsTests extends BaseTest {
                 .selectDate(phpTravelsModel)
                 .selectVisaType(phpTravelsModel)
                 .selectProcessingSpeed(phpTravelsModel)
+                .selectTravellers(phpTravelsModel)
+                .clickOnSearchButton();
+    }
+
+    //TODO: Test under refactor
+    @Test(dataProvider = "searchForTours", dataProviderClass = LandingPageDP.class, retryAnalyzer = RetryAnalyzer.class)
+    @Description("Web. Search for tours via landing page search bar")
+    public void searchForTours(PhpTravelsModel phpTravelsModel) {
+        new LandingPage()
+                .clickOnToursTab()
+                .selectCity(phpTravelsModel)
+                .selectDate(phpTravelsModel)
+                .selectTravellers(phpTravelsModel)
+                .clickOnSearchButton();
+    }
+
+    //TODO: Test under refactor
+    @Test(dataProvider = "searchForCars", dataProviderClass = LandingPageDP.class, retryAnalyzer = RetryAnalyzer.class)
+    @Description("Web. Search for cars via landing page search bar")
+    public void searchForCars(PhpTravelsModel phpTravelsModel) {
+        new LandingPage()
+                .clickOnCarsTab()
+                .selectDepartureAirport(phpTravelsModel)
+                .selectArrivalCity(phpTravelsModel)
+                .selectPickUpDate(phpTravelsModel)
+                .selectPickUpTime(phpTravelsModel)
+                .selectDropOffDate(phpTravelsModel)
+                .selectDropOffTime(phpTravelsModel)
                 .selectTravellers(phpTravelsModel)
                 .clickOnSearchButton();
     }

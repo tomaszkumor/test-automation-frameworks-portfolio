@@ -7,6 +7,8 @@ import org.openqa.selenium.support.FindBy;
 public class SearchBarFlightsLocators extends BasePageFactory {
     @FindBy(xpath = "//span[text() = 'flight_takeoff']/ancestor::button")
     WebElement flightsTab;
+    @FindBy(xpath = "(//h1)[1]")
+    WebElement h1;
     @FindBy(xpath = "//body")
     WebElement body;
     @FindBy(xpath = "//input[@x-ref = 'fromInput']")

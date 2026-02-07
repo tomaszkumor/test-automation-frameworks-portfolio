@@ -239,17 +239,17 @@ public class SearchBarVisa extends SearchBarVisaLocators {
     }
 
     private void checkIfVisaTypeWindowIsDisplayed(boolean shouldBeDisplayed) {
-        By visaTypeWindowLocator = By.xpath("//input[@name = 'visa_type']/following-sibling::div[@class = 'input-dropdown-content show']");
+        By visaTypeWindowLocator = By.xpath("//input[@name = 'visa_type']/following-sibling::div[contains(@class, 'show')]");
         checkIfWindowIsDisplayed(visaTypeWindowLocator, "Date picker", shouldBeDisplayed);
     }
 
     private void checkIfProcessingSpeedWindowIsDisplayed(boolean shouldBeDisplayed) {
-        By processingSpeedWindowLocator = By.xpath("//input[@name = 'processing_speed']/following-sibling::div[@class = 'input-dropdown-content show']");
+        By processingSpeedWindowLocator = By.xpath("//input[@name = 'processing_speed']/following-sibling::div[contains(@class, 'show')]");
         checkIfWindowIsDisplayed(processingSpeedWindowLocator, "Date picker", shouldBeDisplayed);
     }
 
     private void checkIfTravellersWindowIsDisplayed(boolean shouldBeDisplayed) {
-        By travellersWindowLocator = By.xpath("//input[@name = 'travelers']/following-sibling::div[@class = 'input-dropdown-content show']");
+        By travellersWindowLocator = By.xpath("//input[@name = 'travelers']/following-sibling::div[contains(@class, 'show')]");
         checkIfWindowIsDisplayed(travellersWindowLocator, "Date picker", shouldBeDisplayed);
     }
 

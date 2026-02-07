@@ -112,7 +112,7 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
     }
 
     private void scrollIntoSearchBarIfNecessary() {
-        browser.scrollIntoView(flightsTab);
+        browser.scrollIntoView(h1);
     }
 
     private void typeCityNameToDepartureSearchInput(PhpTravelsModel phpTravelsModel) {
@@ -421,18 +421,19 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
     }
 
     private void checkIfTravellersWindowIsDisplayed(boolean shouldBeDisplayed) {
-        By travellersWindowLocator = By.xpath("//input[@name = 'passengers']/following-sibling::div[contains(@class, 'input-dropdown-content')]");
-        checkIfWindowIsDisplayed(travellersWindowLocator, "Travellers ", shouldBeDisplayed);
+        By travellersWindowLocator = By.xpath("//input[@name = 'passengers']/following-sibling::div[contains(@class, 'show')]");
+        checkIfWindowIsDisplayed(travellersWindowLocator, "Travellers", shouldBeDisplayed);
     }
 
     private void checkIfWindowIsDisplayed(By windowLocator, String windowName, boolean shouldBeDisplayed) {
-        WebElement window = getWebDriver().getDriver().findElement(windowLocator);
         if (shouldBeDisplayed) {
             check.isElementPresentByLocator(windowLocator, 50, 15);
+
+            WebElement window = getWebDriver().getDriver().findElement(windowLocator);
             check.isElementDisplayed(window, 15);
             log.info("{} window has been displayed.", windowName);
         } else {
-            check.isElementDisplayed(window, 15);
+            check.isNumberOfElementsEqualTo(windowLocator, 0, 50, 15);
             log.info("{} window has been closed.", windowName);
         }
     }

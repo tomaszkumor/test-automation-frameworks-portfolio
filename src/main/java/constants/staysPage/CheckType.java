@@ -1,4 +1,4 @@
-package constants.hotelsPage;
+package constants.staysPage;
 
 import lombok.Getter;
 

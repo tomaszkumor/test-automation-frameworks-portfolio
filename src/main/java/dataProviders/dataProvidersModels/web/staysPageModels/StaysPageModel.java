@@ -1,4 +1,4 @@
-package dataProviders.dataProvidersModels.web.hotelsPageModels;
+package dataProviders.dataProvidersModels.web.staysPageModels;
 
 import dataProviders.dataProvidersModels.web.commonModels.DateModel;
 import dataProviders.dataProvidersModels.web.commonModels.DestinationModel;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class HotelsPageModel {
+public class StaysPageModel {
     private DateModel expectedCheckInDate;
     private DateModel expectedCheckOutDate;
     private DestinationModel expectedDestination;

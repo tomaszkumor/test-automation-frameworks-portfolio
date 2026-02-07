@@ -9,8 +9,8 @@ public class NavigationHeaderAndFooterLocators extends BasePageFactory {
     WebElement landingPageButton;
     @FindBy(xpath = "//a[normalize-space(text()) = 'Flights']")
     WebElement flightsButton;
-    @FindBy(xpath = "//a[normalize-space(text()) = 'Hotels']")
-    WebElement hotelsButton;
+    @FindBy(xpath = "//a[normalize-space(text()) = 'Stays']")
+    WebElement staysButton;
     @FindBy(xpath = "//a[normalize-space(text()) = 'Tours']")
     WebElement toursButton;
     @FindBy(xpath = "//a[normalize-space(text()) = 'Cars']")

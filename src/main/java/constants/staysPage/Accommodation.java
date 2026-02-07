@@ -1,4 +1,4 @@
-package constants.hotelsPage;
+package constants.staysPage;
 
 import lombok.Getter;
 
@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum Accommodation {
     ROOMS("Rooms"),
     ADULTS("Adults"),
-    CHILDS("Childs");
+    CHILDREN("Childs");
 
     private final String accommodationName;
 

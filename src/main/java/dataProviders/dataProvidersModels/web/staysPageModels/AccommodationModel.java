@@ -1,4 +1,4 @@
-package dataProviders.dataProvidersModels.web.hotelsPageModels;
+package dataProviders.dataProvidersModels.web.staysPageModels;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

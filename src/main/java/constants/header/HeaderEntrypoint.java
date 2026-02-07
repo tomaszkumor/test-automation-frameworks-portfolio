@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum HeaderEntrypoint {
     LANDING_PAGE("Landing page"),
     FLIGHTS("Flights"),
-    HOTELS("Hotels"),
+    STAYS("Stays"),
     TOURS("Tours"),
     CARS("Cars"),
     VISA("Visa"),

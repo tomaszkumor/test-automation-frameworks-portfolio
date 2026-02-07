@@ -12,10 +12,10 @@ import dataProviders.dataProvidersModels.web.commonModels.DateModel;
 import dataProviders.dataProvidersModels.web.commonModels.AirportModel;
 import dataProviders.dataProvidersModels.web.flightsPageModels.FlightsPageModel;
 import dataProviders.dataProvidersModels.web.commonModels.TravellerModel;
-import dataProviders.dataProvidersModels.web.hotelsPageModels.AccommodationModel;
-import dataProviders.dataProvidersModels.web.hotelsPageModels.ChildModel;
+import dataProviders.dataProvidersModels.web.staysPageModels.AccommodationModel;
+import dataProviders.dataProvidersModels.web.staysPageModels.ChildModel;
 import dataProviders.dataProvidersModels.web.commonModels.DestinationModel;
-import dataProviders.dataProvidersModels.web.hotelsPageModels.HotelsPageModel;
+import dataProviders.dataProvidersModels.web.staysPageModels.StaysPageModel;
 import dataProviders.dataProvidersModels.web.phpTravelsModel.PhpTravelsModel;
 import dataProviders.dataProvidersModels.web.toursPageModels.ToursPageModel;
 import dataProviders.dataProvidersModels.web.visaPageModels.VisaPageModel;
@@ -51,19 +51,19 @@ public class LandingPageDP {
     }
 
     @DataProvider
-    Object[][] searchForHotels() {
+    Object[][] searchForStays() {
         return new Object[][]{
                 {PhpTravelsModel.builder()
-                        .hotelsPageModel(HotelsPageModel
+                        .staysPageModel(StaysPageModel
                                 .builder()
                                 .expectedCheckInDate(new DateModel("2026", Month.MARCH, "27"))
                                 .expectedCheckOutDate(new DateModel("2026", Month.NOVEMBER, "11"))
-                                .expectedAccommodation(new AccommodationModel("3", "4", "3"))
+                                .expectedAccommodation(new AccommodationModel("1", "4", "3"))
                                 .expectedDestination(new DestinationModel("Phuket", "Thailand"))
                                 .expectedChildren(List.of(
-                                        new ChildModel("1", "12"),
-                                        new ChildModel("2", "6"),
-                                        new ChildModel("3", "10"))
+                                        new ChildModel("1", "12 years"),
+                                        new ChildModel("2", "6 years"),
+                                        new ChildModel("3", "10 years"))
                                 )
                                 .expectedNationality("Germany")
                                 .build())

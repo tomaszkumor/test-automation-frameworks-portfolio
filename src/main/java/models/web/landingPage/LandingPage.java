@@ -3,7 +3,7 @@ package models.web.landingPage;
 import io.qameta.allure.Step;
 import models.web.landingPage.searchBarCars.SearchBarCars;
 import models.web.landingPage.searchBarFlights.SearchBarFlights;
-import models.web.landingPage.searchBarHotels.SearchBarHotels;
+import models.web.landingPage.searchBarStays.SearchBarStays;
 import models.web.landingPage.searchBarTours.SearchBarTours;
 import models.web.landingPage.searchBarVisa.SearchBarVisa;
 
@@ -25,12 +25,12 @@ public class LandingPage extends LandingPageLocators {
         return new SearchBarFlights();
     }
 
-    @Step("Click on Hotels tab")
-    public SearchBarHotels clickOnHotelsTab() {
-        click.clickOnElement(tabHotels, 15);
-        log.info("Hotels tab has been clicked.");
+    @Step("Click on Stays tab")
+    public SearchBarStays clickOnStaysTab() {
+        click.clickOnElement(tabStays, 15);
+        log.info("Stays tab has been clicked.");
 
-        return new SearchBarHotels();
+        return new SearchBarStays();
     }
 
     @Step("Click on Tours tab")

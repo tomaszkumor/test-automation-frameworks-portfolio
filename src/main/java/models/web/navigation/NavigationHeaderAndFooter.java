@@ -10,7 +10,7 @@ import models.web.menu.carsPage.CarsPage;
 import models.web.menu.currencyDropDown.CurrencyDropDown;
 import models.web.menu.customer.dropDown.CustomerDropDown;
 import models.web.menu.flightsPage.FlightsPage;
-import models.web.menu.hotelsPage.HotelsPage;
+import models.web.menu.staysPage.StaysPage;
 import models.web.menu.languageDropDown.LanguageDropDown;
 import models.web.menu.toursPage.ToursPage;
 import models.web.menu.visaPage.VisaPage;
@@ -35,11 +35,11 @@ public class NavigationHeaderAndFooter extends NavigationHeaderAndFooterLocators
         return new FlightsPage();
     }
 
-    @Step("Click on Hotels button")
-    public HotelsPage clickOnHotelsButton() {
-        clickOnEntrypoint(HeaderEntrypoint.HOTELS, hotelsButton);
+    @Step("Click on Stays button")
+    public StaysPage clickOnStaysButton() {
+        clickOnEntrypoint(HeaderEntrypoint.STAYS, staysButton);
 
-        return new HotelsPage();
+        return new StaysPage();
     }
 
     @Step("Click on Tours button")
@@ -141,7 +141,7 @@ public class NavigationHeaderAndFooter extends NavigationHeaderAndFooterLocators
         return switch (entrypoint) {
             case LANDING_PAGE -> By.xpath("//img[contains(@src, 'logo')]/..");
             case FLIGHTS -> By.xpath("//a[normalize-space(text()) = 'Flights']");
-            case HOTELS -> By.xpath("//a[normalize-space(text()) = 'Hotels']");
+            case STAYS -> By.xpath("//a[normalize-space(text()) = 'Stays']");
             case TOURS -> By.xpath("//a[normalize-space(text()) = 'Tours']");
             case CARS -> By.xpath("//a[normalize-space(text()) = 'Cars']");
             case VISA -> By.xpath("//a[normalize-space(text()) = 'Visa']");

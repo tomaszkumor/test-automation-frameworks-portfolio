@@ -6,7 +6,7 @@
                 <methods>
                     <include name="searchForFlights"/>
                     <include name="searchForVisa"/>
-<!--                    <include name="searchForHotels"/>-->
+                    <include name="searchForStays"/>
 <!--                    <include name="searchForTours"/>-->
 <!--                    <include name="searchForCars"/>-->
                 </methods>
