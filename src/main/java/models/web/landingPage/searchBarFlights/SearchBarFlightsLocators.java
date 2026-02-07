@@ -4,37 +4,25 @@ import basePageFactory.BasePageFactory;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.List;
-
 public class SearchBarFlightsLocators extends BasePageFactory {
-    @FindBy(xpath = "//ul[@id = 'tab']//button[@data-bs-target = '#tab-flights']")
+    @FindBy(xpath = "//span[text() = 'flight_takeoff']/ancestor::button")
     WebElement flightsTab;
-    @FindBy(xpath = "//div[@id = 'tab-flights']")
-    WebElement flightsSearchBar;
-    @FindBy(xpath = "//select[contains(@class, 'flight_way')]")
-    WebElement flightDestinationSelect;
-    @FindBy(xpath = "//select[@id = 'flight_type']")
-    WebElement cabinClassSelect;
-    @FindBy(xpath = "//input[@name = 'from']")
+    @FindBy(xpath = "//body")
+    WebElement body;
+    @FindBy(xpath = "//input[@x-ref = 'fromInput']")
     WebElement departureLocationInput;
-    @FindBy(xpath = "//input[@name = 'to']")
+    @FindBy(xpath = "//input[@x-ref = 'toInput']")
     WebElement arrivalLocationInput;
-    @FindBy(xpath = "//div[@id = 'swap']/*")
-    WebElement swapDirectionsButton;
-    @FindBy(xpath = "//input[@id = 'departure']")
+    @FindBy(xpath = "//input[@name = 'flights_departure_date']")
     WebElement departureDateInput;
-    @FindBy(xpath = "//input[@id = 'return_date']")
+    @FindBy(xpath = "//input[@name = 'flights_arrival_date']")
     WebElement returnDateInput;
-    @FindBy(xpath = "//span[@class = 'guest_flights']/ancestor::div[contains(@class, 'dropdown-contain')]")
-    WebElement travellersDropDown;
-    @FindBy(xpath = "//form[@id = 'flights-search']//button[@type = 'submit']")
+    @FindBy(xpath = "//label/text()[normalize-space(.) = 'Passengers']/ancestor::div[contains(@class, 'form-control')]/div[@class = 'input-dropdown']")
+    WebElement passengersDropDown;
+    @FindBy(xpath = "//span[text() = 'Search Flights']/..")
     WebElement searchButton;
-    @FindBy(xpath = "//div[contains(@class, 'results-container-from')]/div")
-    List<WebElement> departureLocations;
-    @FindBy(xpath = "//div[contains(@class, 'results-container-from')]")
-    WebElement departureLocationsContainer;
-    @FindBy(xpath = "//div[contains(@class, 'results-container-to')]/div")
-    List<WebElement> arrivalLocations;
-    @FindBy(xpath = "//div[contains(@class, 'results-container-to')]")
-    WebElement arrivalLocationsContainer;
+    @FindBy(xpath = "//label/text()[normalize-space(.) = 'Flight Class']/ancestor::div[@class = 'form-control']/div[@class = 'input-dropdown']//span[@x-text = 'getSelectedName()']")
+    WebElement flightClassSelect;
+    @FindBy(xpath = "//label/text()[normalize-space(.) = 'Flight Type']/ancestor::div[@class = 'form-control']/div[@class = 'input-dropdown']//span[@x-text = 'getSelectedName()']")
+    WebElement flightTypeSelect;
 }

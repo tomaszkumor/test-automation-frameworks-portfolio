@@ -1,26 +1,15 @@
 package models.web.landingPage.searchBarFlights;
 
-import constants.common.Arrow;
-import constants.common.Date;
-import constants.common.Traveller;
-import constants.flightsPage.FlightType;
-import constants.common.Location;
-import constants.common.LocationType;
+import constants.common.*;
 import dataProviders.dataProvidersModels.web.commonModels.DateModel;
 import dataProviders.dataProvidersModels.web.commonModels.TravellerModel;
-import dataProviders.dataProvidersModels.web.commonModels.AirportModel;
 import dataProviders.dataProvidersModels.web.phpTravelsModel.PhpTravelsModel;
 import io.qameta.allure.Step;
 import models.web.menu.flightsPage.flightsSearchPage.FlightsSearchPage;
-import org.assertj.core.api.SoftAssertions;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
 
 import java.time.format.TextStyle;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import static driver.BaseDriver.getWebDriver;
@@ -38,8 +27,7 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
     public SearchBarFlights selectDepartureLocation(PhpTravelsModel phpTravelsModel) {
         checkDepartureLocationBeforeInput();
         clickOnDepartureLocationInput();
-        checkIfDepartureAirportsAreDisplayed();
-        checkDepartureLocationsAvailability(phpTravelsModel);
+        typeCityNameToDepartureSearchInput(phpTravelsModel);
         findAndSelectDepartureLocation(phpTravelsModel);
         checkDepartureLocationAfterInput(phpTravelsModel);
 
@@ -50,44 +38,42 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
     public SearchBarFlights selectArrivalLocation(PhpTravelsModel phpTravelsModel) {
         checkArrivalLocationBeforeInput();
         clickOnArrivalLocationInput();
-        checkIfArrivalAirportsAreDisplayed();
-        checkArrivalLocationsAvailability(phpTravelsModel);
+        typeCityNameToArrivalSearchInput(phpTravelsModel);
         findAndSelectArrivalLocation(phpTravelsModel);
         checkArrivalLocationAfterInput(phpTravelsModel);
+        closeDepartureDatePickerWindowIfNecessary();
 
         return this;
     }
 
     @Step("Select flight destination")
-    public SearchBarFlights selectFlightDestination(PhpTravelsModel phpTravelsModel) {
-        selectSpecificFlightDestination(phpTravelsModel);
-        compareFlightDestinies(phpTravelsModel);
+    public SearchBarFlights selectFlightType(PhpTravelsModel phpTravelsModel) {
+        checkFlightTypeBeforeChange();
+        clickOnFlightTypeSelect();
+        selectSpecificFlightType(phpTravelsModel);
+        checkFlightTypeAfterChange(phpTravelsModel);
 
         return this;
     }
 
     @Step("Select cabin class")
     public SearchBarFlights selectCabinClass(PhpTravelsModel phpTravelsModel) {
-        selectSpecificCabinClass(phpTravelsModel);
-        compareCabinClasses(phpTravelsModel);
-
-        return this;
-    }
-
-    @Step("Swap departure and arrival locations")
-    public SearchBarFlights swapDepartureAndArrivalLocations() {
-        swapLocations();
-        checkLocationsAfterSwap();
+        checkFlightClassBeforeChange();
+        clickOnFlightClassSelect();
+        selectSpecificFlightClass(phpTravelsModel);
+        checkFlightClassAfterChange(phpTravelsModel);
 
         return this;
     }
 
     @Step("Select departure date")
     public SearchBarFlights selectDepartureDate(PhpTravelsModel phpTravelsModel) {
+        clickOnDateInput(LocationType.DEPARTURE);
         selectDepartureDateYear(phpTravelsModel);
         selectDepartureDateMonth(phpTravelsModel);
         selectDepartureDateDay(phpTravelsModel);
         checkActualDepartureDate(phpTravelsModel);
+        scrollIntoSearchBarIfNecessary();
 
         return this;
     }
@@ -104,7 +90,7 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
 
     @Step("Select travellers")
     public SearchBarFlights selectTravellers(PhpTravelsModel phpTravelsModel) {
-        checkInitialTravellersCount();
+        checkTravellersCountBeforeChange();
         clickOnTravellersInput();
         checkIfTravellersWindowIsDisplayed(true);
         setAdultsNumber(phpTravelsModel);
@@ -125,29 +111,59 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         return new FlightsSearchPage();
     }
 
-    private void swapLocations() {
-        click.clickOnEnabledElement(swapDirectionsButton, 15);
-
-        log.info("Swap locations button has been clicked.");
+    private void scrollIntoSearchBarIfNecessary() {
+        browser.scrollIntoView(flightsTab);
     }
 
-    private void checkLocationsAfterSwap() {
-        String departureLocationBeforeSwap = get.getValueFromElement(departureLocationInput);
-        String arrivalLocationBeforeSwap = get.getValueFromElement(arrivalLocationInput);
-        String departureLocationAfterSwap = get.getValueFromElement(departureLocationInput);
-        String arrivalLocationAfterSwap = get.getValueFromElement(arrivalLocationInput);
+    private void typeCityNameToDepartureSearchInput(PhpTravelsModel phpTravelsModel) {
+        String city = getExpectedDepartureLocationFromDataProvider(phpTravelsModel).getAirportCity();
+        send.sendKeysToWebElementWithNoLeave(departureLocationInput, city);
+        log.info("{} has been typed to departure location search input.", city);
+    }
 
-        SoftAssertions softAssertions = new SoftAssertions();
-        softAssertions.assertThat(departureLocationAfterSwap).isEqualTo(arrivalLocationBeforeSwap);
-        softAssertions.assertThat(arrivalLocationAfterSwap).isEqualTo(departureLocationBeforeSwap);
-        softAssertions.assertAll();
+    private void typeCityNameToArrivalSearchInput(PhpTravelsModel phpTravelsModel) {
+        String city = getExpectedArrivalLocationFromDataProvider(phpTravelsModel).getAirportCity();
+        send.sendKeysToWebElementWithNoLeave(arrivalLocationInput, city);
+        log.info("{} has been typed to arrival location search input.", city);
+    }
 
-        log.info("Locations has been swapped correctly.");
+    private void clickOnFlightTypeSelect() {
+        click.clickOnElement(flightTypeSelect, 15);
+        log.info("Flight type select has been clicked.");
+    }
+
+    private void clickOnFlightClassSelect() {
+        click.clickOnElement(flightClassSelect, 15);
+        log.info("Flight class select has been clicked.");
+    }
+
+    private void checkFlightTypeBeforeChange() {
+        String expectedFlightTypeValue = "One Way";
+        checkSelectValue(flightTypeSelect, "flight type", expectedFlightTypeValue);
+    }
+
+    private void checkFlightTypeAfterChange(PhpTravelsModel phpTravelsModel) {
+        String expectedFlightTypeValue = getExpectedFlightTypeAsStringFromDataProvider(phpTravelsModel);
+        checkSelectValue(flightTypeSelect, "flight type", expectedFlightTypeValue);
+    }
+
+    private void checkFlightClassBeforeChange() {
+        String expectedFlightClassValue = "Economy";
+        checkSelectValue(flightClassSelect, "flight class", expectedFlightClassValue);
+    }
+
+    private void checkFlightClassAfterChange(PhpTravelsModel phpTravelsModel) {
+        String expectedFlightClassValue = getExpectedFlightClassFromDataProvider(phpTravelsModel);
+        checkSelectValue(flightClassSelect, "flight class", expectedFlightClassValue);
+    }
+
+    private void checkSelectValue(WebElement select, String selectName, String expectedVisaTypeValue) {
+        check.isTextDisplayed(select, expectedVisaTypeValue, 15);
+        log.info("Selected {} value: {}.", selectName, expectedVisaTypeValue);
     }
 
     private void closeTravellersWindow() {
-        WebElement element = getWebDriver().getDriver().findElement(By.xpath("//body"));
-        click.clickOnElement(element, 5);
+        click.clickOnElement(passengersDropDown, 15);
     }
 
     private void setAdultsNumber(PhpTravelsModel phpTravelsModel) {
@@ -169,10 +185,10 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         checkSpecificTravellersCountAfterChange(phpTravelsModel, Traveller.INFANTS);
     }
 
-    private void checkInitialTravellersCount() {
-        WebElement travellersCount = travellersDropDown.findElement(By.xpath(".//span"));
+    private void checkTravellersCountBeforeChange() {
+        WebElement travellersCount = passengersDropDown.findElement(By.xpath("./div/span[@x-text = 'getPassengerText()']"));
         String actualTravellersCount = get.getTextFromElement(travellersCount);
-        String expectedTravellersCount = "1";
+        String expectedTravellersCount = "1 Passenger";
 
         assertThat(actualTravellersCount)
                 .as("Travellers count check before change")
@@ -180,9 +196,9 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
     }
 
     private void checkTravellersCountAfterChange(PhpTravelsModel phpTravelsModel) {
-        WebElement travellersCount = travellersDropDown.findElement(By.xpath(".//span"));
+        WebElement travellersCount = passengersDropDown.findElement(By.xpath("./div/span[@x-text = 'getPassengerText()']"));
         String actualTravellersCount = get.getTextFromElement(travellersCount);
-        String expectedTravellersCount = getTotalCountOfTravellers(phpTravelsModel);
+        String expectedTravellersCount = getTotalCountOfTravellers(phpTravelsModel).concat(" Passengers");
 
         assertThat(actualTravellersCount)
                 .as("Travellers count check after change")
@@ -202,24 +218,24 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
     }
 
     private void clickOnTravellersInput() {
-        click.clickOnElement(travellersDropDown, 15);
+        click.clickOnElement(passengersDropDown, 15);
         log.info("Travellers drop down has been clicked.");
     }
 
     private String getActualSpecificTravellerGroupCount(Traveller traveller) {
         By specificTravellerGroupCountLocator = getActualSpecificTravellerGroupCountLocator(traveller);
 
-        return get.getValueFromElement(specificTravellerGroupCountLocator);
+        return get.getTextFromElement(specificTravellerGroupCountLocator);
     }
 
     private By getActualSpecificTravellerGroupCountLocator(Traveller traveller) {
         String specificTravellerGroupClass = switch (traveller) {
-            case ADULTS -> "fadults";
-            case CHILDS -> "fchilds";
-            case INFANTS -> "finfant";
+            case ADULTS -> "adults";
+            case CHILDS -> "children";
+            case INFANTS -> "infants";
         };
 
-        return By.xpath("//div[contains(@class, 'dropdown-menu') and contains(@style, 'block')]//following::input[@id = '" + specificTravellerGroupClass + "']");
+        return By.xpath("//div[contains(@class, 'show')]//span[@x-text = '" + specificTravellerGroupClass + "']");
     }
 
     private void compareSpecificTravellerGroupCount(String actualSpecificTravellerGroupCount, String expectedSpecificTravellerGroupCount, Traveller traveller, String stage) {
@@ -258,18 +274,18 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
     }
 
     private By getArrowLocator(Traveller traveller, Arrow arrow) {
-        String arrowClass = switch (arrow) {
-            case LEFT -> "qtyDec";
-            case RIGHT -> "qtyInc";
+        String arrowNumber = switch (arrow) {
+            case LEFT -> "1";
+            case RIGHT -> "2";
         };
 
         String specificTravellerGroupClass = switch (traveller) {
-            case ADULTS -> "adult_qty";
-            case CHILDS -> "child_qty";
-            case INFANTS -> "infant_qty";
+            case ADULTS -> "adults";
+            case CHILDS -> "children";
+            case INFANTS -> "infants";
         };
 
-        return By.xpath("//div[contains(@class, 'dropdown-menu') and contains(@style, 'block')]//div[contains(@class, '" + specificTravellerGroupClass + "')]//div[@class = '" + arrowClass + "']");
+        return By.xpath("//div[contains(@class, 'show')]//span[@x-text = '" + specificTravellerGroupClass + "']/../button[" + arrowNumber + "]");
     }
 
     private WebElement getArrowButton(Traveller traveller, Arrow arrow) {
@@ -308,28 +324,17 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
     }
 
     private void selectDepartureDateYear(PhpTravelsModel phpTravelsModel) {
-        clickOnDateInput(LocationType.DEPARTURE);
         checkIfDatePickerWindowIsDisplayed(true, "Departure");
         clickOnDatePickerHeader(Date.YEAR);
         selectSpecificDate(phpTravelsModel, LocationType.DEPARTURE, Date.YEAR);
-        closeReturnDatePickerWindowIfNecessary(phpTravelsModel);
-        checkIfDatePickerWindowIsDisplayed(false, "Departure");
     }
 
     private void selectDepartureDateMonth(PhpTravelsModel phpTravelsModel) {
-        clickOnDateInput(LocationType.DEPARTURE);
-        checkIfDatePickerWindowIsDisplayed(true, "Departure");
-        clickOnDatePickerHeader(Date.MONTH);
         selectSpecificDate(phpTravelsModel, LocationType.DEPARTURE, Date.MONTH);
-        closeReturnDatePickerWindowIfNecessary(phpTravelsModel);
-        checkIfDatePickerWindowIsDisplayed(false, "Departure");
     }
 
     private void selectDepartureDateDay(PhpTravelsModel phpTravelsModel) {
-        clickOnDateInput(LocationType.DEPARTURE);
-        checkIfDatePickerWindowIsDisplayed(true, "Departure");
         selectSpecificDate(phpTravelsModel, LocationType.DEPARTURE, Date.DAY);
-        closeReturnDatePickerWindowIfNecessary(phpTravelsModel);
         checkIfDatePickerWindowIsDisplayed(false, "Departure");
     }
 
@@ -356,15 +361,10 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         checkIfDatePickerWindowIsDisplayed(false, "Arrival");
     }
 
-    private void closeReturnDatePickerWindowIfNecessary(PhpTravelsModel phpTravelsModel) {
-        FlightType flightDestination = getExpectedFlightDestinationFromDataProvider(phpTravelsModel);
-
-        if (flightDestination == FlightType.RETURN) {
-            checkIfDatePickerWindowIsDisplayed(true, "Arrival");
-            WebElement element = getWebDriver().getDriver().findElement(By.xpath("//body"));
-            click.clickOnElement(element, 5);
-            checkIfDatePickerWindowIsDisplayed(false, "Arrival");
-        }
+    private void closeDepartureDatePickerWindowIfNecessary() {
+        checkIfDatePickerWindowIsDisplayed(true, "Departure");
+        click.clickOnElement(body, 15);
+        checkIfDatePickerWindowIsDisplayed(false, "Departure");
     }
 
     private void checkActualDepartureDate(PhpTravelsModel phpTravelsModel) {
@@ -376,6 +376,11 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
     }
 
     private void checkActualDate(PhpTravelsModel phpTravelsModel, LocationType locationType) {
+        switch (locationType) {
+            case DEPARTURE -> check.isElementEnabled(departureDateInput, 15);
+            case ARRIVAL -> check.isElementEnabled(returnDateInput, 15);
+        }
+
         String actualDate = switch (locationType) {
             case DEPARTURE -> get.getValueFromElement(departureDateInput);
             case ARRIVAL -> get.getValueFromElement(returnDateInput);
@@ -396,12 +401,12 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
     private void clickOnDateInput(LocationType locationType) {
         switch (locationType) {
             case DEPARTURE -> {
-                By locator = By.xpath("//input[@id = 'departure']");
+                By locator = By.xpath("//input[@name = 'flights_departure_date']");
                 check.isElementPresentByLocator(locator, 10);
                 click.clickOnEnabledElement(departureDateInput, 15);
             }
             case ARRIVAL -> {
-                By locator = By.xpath("//input[@id = 'return_date']");
+                By locator = By.xpath("//input[@name = 'flights_arrival_date']");
                 check.isElementPresentByLocator(locator, 10);
                 click.clickOnEnabledElement(returnDateInput, 15);
             }
@@ -411,30 +416,24 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
     }
 
     private void checkIfDatePickerWindowIsDisplayed(boolean shouldBeDisplayed, String destination) {
-        By datePickerWindowLocator = By.xpath("//div[@class = 'datepicker dropdown-menu' and contains(@style, 'block')]");
-        if (shouldBeDisplayed) {
-            check.isElementPresentByLocator(datePickerWindowLocator, 50, 15);
-
-            WebElement datePickerWindow = getWebDriver().getDriver().findElement(datePickerWindowLocator);
-            check.isElementDisplayed(datePickerWindow, 15);
-            log.info("{} date picker window has been displayed.", destination);
-        } else {
-            check.isNumberOfElementsEqualTo(datePickerWindowLocator, 0, 50, 15);
-            log.info("{} date picker window has been closed.", destination);
-        }
+        By datePickerWindowLocator = By.xpath("//div[@class = 'datepicker-days']/ancestor::div[contains(@class, 'datepicker') and not(contains(@class, 'hidden'))]");
+        checkIfWindowIsDisplayed(datePickerWindowLocator, destination + " date picker", shouldBeDisplayed);
     }
 
     private void checkIfTravellersWindowIsDisplayed(boolean shouldBeDisplayed) {
-        By travellersWindowLocator = By.xpath("//div[contains(@class, 'dropdown-menu') and contains(@style, 'block')]");
-        if (shouldBeDisplayed) {
-            check.isElementPresentByLocator(travellersWindowLocator, 50, 15);
+        By travellersWindowLocator = By.xpath("//input[@name = 'passengers']/following-sibling::div[contains(@class, 'input-dropdown-content')]");
+        checkIfWindowIsDisplayed(travellersWindowLocator, "Travellers ", shouldBeDisplayed);
+    }
 
-            WebElement travellersWindow = getWebDriver().getDriver().findElement(travellersWindowLocator);
-            check.isElementDisplayed(travellersWindow, 15);
-            log.info("Travellers window has been displayed.");
+    private void checkIfWindowIsDisplayed(By windowLocator, String windowName, boolean shouldBeDisplayed) {
+        WebElement window = getWebDriver().getDriver().findElement(windowLocator);
+        if (shouldBeDisplayed) {
+            check.isElementPresentByLocator(windowLocator, 50, 15);
+            check.isElementDisplayed(window, 15);
+            log.info("{} window has been displayed.", windowName);
         } else {
-            check.isNumberOfElementsEqualTo(travellersWindowLocator, 0, 50, 15);
-            log.info("Traveller window has been closed.");
+            check.isElementDisplayed(window, 15);
+            log.info("{} window has been closed.", windowName);
         }
     }
 
@@ -445,14 +444,24 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
             default -> 0;
         };
 
-        By datePickerWindowHeaderLocator = By.xpath("//div[@class = 'datepicker dropdown-menu' and contains(@style, 'block')]/div[contains(@style, 'block')]//th[@class = 'switch']");
         for (int i = 0; i < iterator; i++) {
+            By datePickerWindowHeaderLocator = getDatePickerWindowHeaderLocator(i);
             check.isNumberOfElementsEqualTo(datePickerWindowHeaderLocator, 1, 5);
             WebElement datePickerWindowHeader = getWebDriver().getDriver().findElement(datePickerWindowHeaderLocator);
             click.clickOnVisibleElement(datePickerWindowHeader, 15);
 
             log.info("Date picker header has been clicked.");
         }
+    }
+
+    private By getDatePickerWindowHeaderLocator(int i) {
+        String datePickerHeader = switch (i) {
+            case 0 -> "days";
+            case 1 -> "months";
+            default -> null;
+        };
+
+        return By.xpath("//div[@class = 'datepicker-" + datePickerHeader + "']/ancestor::div[contains(@class, 'datepicker') and not(contains(@class, 'hidden'))]/div[@class = 'datepicker-" + datePickerHeader + "']//th[contains(@class, 'switch')]");
     }
 
     private void selectSpecificDate(PhpTravelsModel phpTravelsModel, LocationType locationType, Date date) {
@@ -468,13 +477,16 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         };
 
         By dateLocator = switch (date) {
-            case YEAR, MONTH ->
-                    By.xpath("//div[@class = 'datepicker dropdown-menu' and contains(@style, 'block')]/div[contains(@style, 'block')]//tbody//span[text() = '" + specificDate + "']");
+            case YEAR ->
+                    By.xpath("//div[@class = 'datepicker-years']/ancestor::div[contains(@class, 'datepicker') and not(contains(@class, 'hidden'))]/div[@class = 'datepicker-years']//span[text() = '" + specificDate + "']");
+            case MONTH ->
+                    By.xpath("//div[@class = 'datepicker-months']/ancestor::div[contains(@class, 'datepicker') and not(contains(@class, 'hidden'))]/div[@class = 'datepicker-months']//span[text() = '" + specificDate + "']");
             case DAY ->
-                    By.xpath("//div[@class = 'datepicker dropdown-menu' and contains(@style, 'block')]/div[contains(@style, 'block')]//tbody//td[@class = 'day ' and text() = '" + specificDate + "']");
+                    By.xpath("//div[@class = 'datepicker-days']/ancestor::div[contains(@class, 'datepicker') and not(contains(@class, 'hidden'))]/div[@class = 'datepicker-days']//div[text() = '" + specificDate + "' and not(contains(@class, 'old'))]");
         };
 
         WebElement dateButton = getWebDriver().getDriver().findElement(dateLocator);
+        browser.scrollIntoView(dateButton);
         click.clickOnVisibleElement(dateButton, 15);
         log.info("{} date: {} {} has been clicked.", locationType.getLocationTypeName(), date.getName(), specificDate);
     }
@@ -532,40 +544,20 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         }
     }
 
-    private void selectSpecificFlightDestination(PhpTravelsModel phpTravelsModel) {
-        String expectedFlightDestinationValue = getExpectedFlightDestinationAsStringFromDataProvider(phpTravelsModel);
-        Select flightDestinationSelect = new Select(this.flightDestinationSelect);
-        flightDestinationSelect.selectByContainsVisibleText(expectedFlightDestinationValue);
+    private void selectSpecificFlightType(PhpTravelsModel phpTravelsModel) {
+        String expectedFlightTypeValue = getExpectedFlightDestinationAsStringFromDataProvider(phpTravelsModel);
+        By specificFlightTypeLocator = By.xpath("//span[@x-text = 'type.name' and text() = '" + expectedFlightTypeValue + "']/..");
+
+        WebElement specificSelectButton = getWebDriver().getDriver().findElement(specificFlightTypeLocator);
+        click.clickOnElement(specificSelectButton, 15);
     }
 
-    private void selectSpecificCabinClass(PhpTravelsModel phpTravelsModel) {
-        String expectedCabinClassValue = getExpectedCabinClassFromDataProvider(phpTravelsModel);
-        Select cabinClassSelect = new Select(this.cabinClassSelect);
-        cabinClassSelect.selectByContainsVisibleText(expectedCabinClassValue);
-    }
+    private void selectSpecificFlightClass(PhpTravelsModel phpTravelsModel) {
+        String expectedFlightClassValue = getExpectedCabinClassFromDataProvider(phpTravelsModel);
+        By specificFlightTypeLocator = By.xpath("//span[@x-text = 'cls.name' and text() = '" + expectedFlightClassValue + "']/..");
 
-    private void compareFlightDestinies(PhpTravelsModel phpTravelsModel) {
-        String expectedFlightDestinationValue = getExpectedFlightDestinationAsStringFromDataProvider(phpTravelsModel);
-
-        Select flightDestinationSelect = new Select(this.flightDestinationSelect);
-        String actualFlightDestinationValue = get.getTextFromElement(flightDestinationSelect.getFirstSelectedOption()).trim();
-        assertThat(actualFlightDestinationValue)
-                .as("Flight destination value check")
-                .isEqualTo(expectedFlightDestinationValue);
-
-        log.info("Selected flight destination value: " + actualFlightDestinationValue);
-    }
-
-    private void compareCabinClasses(PhpTravelsModel phpTravelsModel) {
-        String expectedCabinClassValue = getExpectedCabinClassFromDataProvider(phpTravelsModel);
-
-        Select cabinClassSelect = new Select(this.cabinClassSelect);
-        String actualCabinClassValue = get.getTextFromElement(cabinClassSelect.getFirstSelectedOption()).trim();
-        assertThat(actualCabinClassValue)
-                .as("Cabin class value check")
-                .isEqualTo(expectedCabinClassValue);
-
-        log.info("Selected cabin class value: " + actualCabinClassValue);
+        WebElement specificFlightClassButton = getWebDriver().getDriver().findElement(specificFlightTypeLocator);
+        click.clickOnElement(specificFlightClassButton, 15);
     }
 
     private void findAndSelectDepartureLocation(PhpTravelsModel phpTravelsModel) {
@@ -589,97 +581,22 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         log.info("{}, {}, {} has been set as {} location.", airportName, airportCity, airportCountry, destination);
     }
 
-    private void checkDepartureLocationsAvailability(PhpTravelsModel phpTravelsModel) {
-        List<AirportModel> actualDepartureLocations = getActualDepartureLocations();
-//        List<AirportModel> expectedDepartureLocations = getExpectedDepartureLocationsFromDataProvider(phpTravelsModel);
-
-//        compareLocations(actualDepartureLocations, expectedDepartureLocations);
-    }
-
-    private void checkArrivalLocationsAvailability(PhpTravelsModel phpTravelsModel) {
-        List<AirportModel> actualArrivalLocations = getActualArrivalLocations();
-//        List<AirportModel> expectedArrivalLocations = getExpectedArrivalLocationsFromDataProvider(phpTravelsModel);
-
-//        compareLocations(actualArrivalLocations, expectedArrivalLocations);
-    }
-
-    private void compareLocations(List<AirportModel> actualLocations, List<AirportModel> expectedLocations) {
-        assertThat(actualLocations)
-                .as("Locations check")
-                .doesNotHaveDuplicates()
-                .usingRecursiveFieldByFieldElementComparator()
-                .containsExactlyInAnyOrderElementsOf(expectedLocations);
-    }
-
     private WebElement getExpectedDepartureLocationInput(Location expectedDepartureLocation) {
         String locationCode = expectedDepartureLocation.getAirportCode();
-        By locationLocator = By.xpath("//div[contains(@class, 'results-container-from')]/div[@data-code = '" + locationCode + "']");
+        By locationLocator = By.xpath("//span[@x-text = 'a.id' and text() = '" + locationCode + "']/../..");
 
         return getWebDriver().getDriver().findElement(locationLocator);
     }
 
     private WebElement getExpectedArrivalLocationInput(Location expectedDepartureLocation) {
         String locationCode = expectedDepartureLocation.getAirportCode();
-        By locationLocator = By.xpath("//div[contains(@class, 'results-container-to')]/div[@data-code = '" + locationCode + "']");
+        By locationLocator = By.xpath("//span[@x-text = 'a.id' and text() = '" + locationCode + "']/../..");
 
         return getWebDriver().getDriver().findElement(locationLocator);
     }
 
-    private List<AirportModel> getActualDepartureLocations() {
-        List<AirportModel> actualDepartureLocations = new ArrayList<>();
-
-        for (WebElement departureLocation : departureLocations) {
-            String airportName = getActualAirportName(departureLocation);
-            String airportCity = getActualAirportCityName(departureLocation);
-            String airportCountry = getActualAirportCountryName(departureLocation);
-            String airportCode = getActualAirportCodeName(departureLocation);
-
-            actualDepartureLocations.add(new AirportModel(airportName, airportCity, airportCountry, airportCode));
-        }
-
-        return actualDepartureLocations;
-    }
-
-    private List<AirportModel> getActualArrivalLocations() {
-        List<AirportModel> actualArrivalLocations = new ArrayList<>();
-
-        for (WebElement arrivalLocation : arrivalLocations) {
-            String airportName = getActualAirportName(arrivalLocation);
-            String airportCity = getActualAirportCityName(arrivalLocation);
-            String airportCountry = getActualAirportCountryName(arrivalLocation);
-            String airportCode = getActualAirportCodeName(arrivalLocation);
-
-            actualArrivalLocations.add(new AirportModel(airportName, airportCity, airportCountry, airportCode));
-        }
-
-        return actualArrivalLocations;
-    }
-
-    private String getActualAirportName(WebElement location) {
-        return get.getTextFromElement(location.findElement(By.xpath(".//small[contains(@class, 'airport--name')]")));
-    }
-
-    private String getActualAirportCityName(WebElement element) {
-        JavascriptExecutor js = (JavascriptExecutor) getWebDriver().getDriver();
-        return (String) js.executeScript(
-                """
-                            var node = arguments[0].firstChild;
-                            return (node && node.nodeType === 3) ? node.textContent.trim() : '';
-                        """,
-                element.findElement(By.xpath(".//strong"))
-        );
-    }
-
-    private String getActualAirportCountryName(WebElement location) {
-        return get.getTextFromElement(location.findElement(By.xpath(".//strong/small")));
-    }
-
-    private String getActualAirportCodeName(WebElement location) {
-        return get.getTextFromElement(location.findElement(By.xpath("./button")));
-    }
-
     private void checkIfTabIsActive() {
-        assertThat(check.isAttributeEqualTo(flightsTab, "aria-selected", "true", 50, 5))
+        assertThat(check.isAttributePresent(flightsTab, "class", "text-primary", 50, 5))
                 .as("Flights tab activity check")
                 .isTrue();
 
@@ -687,8 +604,8 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
     }
 
     private void checkIfSearchBarIsDisplayed() {
-        check.isElementDisplayed(flightsSearchBar, 15);
-        log.info("Flights search bar has been displayed");
+        check.isElementDisplayed(flightsTab, 15);
+        log.info("Flights tab has been displayed.");
     }
 
     private void clickOnDepartureLocationInput() {
@@ -704,20 +621,6 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         log.info(locationDestination + " input has been clicked.");
     }
 
-    private void checkIfDepartureAirportsAreDisplayed() {
-        checkIfAirportsAreDisplayed(departureLocationsContainer, "from");
-    }
-
-    private void checkIfArrivalAirportsAreDisplayed() {
-        checkIfAirportsAreDisplayed(arrivalLocationsContainer, "to");
-    }
-
-    private void checkIfAirportsAreDisplayed(WebElement airportsContainer, String airportLocator) {
-        check.isElementDisplayed(airportsContainer, 15);
-        By departureAirportLocator = By.xpath("//div[contains(@class, 'results-container-" + airportLocator + "')]/div");
-        check.isNumberOfElementsGreaterThan(departureAirportLocator, 0, 50, 10);
-    }
-
     private Location getExpectedDepartureLocationFromDataProvider(PhpTravelsModel phpTravelsModel) {
         return phpTravelsModel.getFlightsPageModel().getExpectedDepartureLocation();
     }
@@ -726,23 +629,19 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         return phpTravelsModel.getFlightsPageModel().getExpectedArrivalLocation();
     }
 
-//    private List<AirportModel> getExpectedDepartureLocationsFromDataProvider(PhpTravelsModel phpTravelsModel) {
-//        return phpTravelsModel.getFlightsPageModel().getExpectedDepartureLocations();
-//    }
-
-//    private List<AirportModel> getExpectedArrivalLocationsFromDataProvider(PhpTravelsModel phpTravelsModel) {
-//        return phpTravelsModel.getFlightsPageModel().getExpectedArrivalLocations();
-//    }
-
     private String getExpectedFlightDestinationAsStringFromDataProvider(PhpTravelsModel phpTravelsModel) {
         return phpTravelsModel.getFlightsPageModel().getExpectedFlightType().getFlightDestination();
     }
 
-    private FlightType getExpectedFlightDestinationFromDataProvider(PhpTravelsModel phpTravelsModel) {
-        return phpTravelsModel.getFlightsPageModel().getExpectedFlightType();
+    private String getExpectedCabinClassFromDataProvider(PhpTravelsModel phpTravelsModel) {
+        return phpTravelsModel.getFlightsPageModel().getExpectedFlightClass().getCabinClass();
     }
 
-    private String getExpectedCabinClassFromDataProvider(PhpTravelsModel phpTravelsModel) {
+    private TravellerModel getExpectedTravellersFromDataProvider(PhpTravelsModel phpTravelsModel) {
+        return phpTravelsModel.getFlightsPageModel().getExpectedTravellers();
+    }
+
+    private String getExpectedFlightClassFromDataProvider(PhpTravelsModel phpTravelsModel) {
         return phpTravelsModel.getFlightsPageModel().getExpectedFlightClass().getCabinClass();
     }
 
@@ -753,7 +652,7 @@ public class SearchBarFlights extends SearchBarFlightsLocators {
         };
     }
 
-    private TravellerModel getExpectedTravellersFromDataProvider(PhpTravelsModel phpTravelsModel) {
-        return phpTravelsModel.getFlightsPageModel().getExpectedTravellers();
+    private String getExpectedFlightTypeAsStringFromDataProvider(PhpTravelsModel phpTravelsModel) {
+        return phpTravelsModel.getFlightsPageModel().getExpectedFlightType().getFlightDestination();
     }
 }

@@ -17,12 +17,11 @@ public class PhpTravelsTests extends BaseTest {
     public void searchForFlights(PhpTravelsModel phpTravelsModel) {
         new LandingPage()
                 .clickOnFlightsTab()
-                .selectFlightDestination(phpTravelsModel)
+                .selectFlightType(phpTravelsModel)
                 .selectCabinClass(phpTravelsModel)
                 .selectDepartureLocation(phpTravelsModel)
                 .selectArrivalLocation(phpTravelsModel)
                 .selectDepartureDate(phpTravelsModel)
-                .selectReturnDate(phpTravelsModel)
                 .selectTravellers(phpTravelsModel)
                 .clickOnSearchButton();
     }

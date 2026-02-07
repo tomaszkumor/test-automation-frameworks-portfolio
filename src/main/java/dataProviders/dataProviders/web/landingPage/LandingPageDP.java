@@ -27,8 +27,6 @@ import java.util.List;
 public class LandingPageDP {
     @DataProvider
     Object[][] searchForFlights() {
-        List<AirportModel> expectedDepartureLocations = getExpectedDepartureLocations();
-        List<AirportModel> expectedArrivalLocations = getExpectedArrivalLocations();
         List<HeaderLanguage> expectedLanguages = getExpectedLanguages();
         DateModel expectedDepartureDate = getExpectedDepartureDate();
         DateModel expectedReturnDate = getExpectedReturnDate();
@@ -41,8 +39,8 @@ public class LandingPageDP {
                                 .builder()
                                 .expectedDepartureLocation(Location.NEW_YORK_CITY_AA)
                                 .expectedArrivalLocation(Location.BERLIN)
-                                .expectedFlightClass(FlightClass.FIRST)
-                                .expectedFlightType(FlightType.RETURN)
+                                .expectedFlightClass(FlightClass.BUSINESS)
+                                .expectedFlightType(FlightType.ONE_WAY)
                                 .expectedDepartureDate(expectedDepartureDate)
                                 .expectedReturnDate(expectedReturnDate)
                                 .expectedTravellers(expectedTravellers)
@@ -123,38 +121,6 @@ public class LandingPageDP {
                                 .build())
                         .build()
                 }
-        };
-    }
-
-    private List<AirportModel> getExpectedDepartureLocations() {
-        String caller = getCaller();
-
-        return switch (caller) {
-            case "searchForFlights" -> List.of(new AirportModel(Location.NEW_YORK_CITY_AA),
-                    new AirportModel(Location.LONDON),
-                    new AirportModel(Location.BERLIN),
-                    new AirportModel(Location.SINGAPORE),
-                    new AirportModel(Location.MOSCOW),
-                    new AirportModel(Location.MANILA),
-                    new AirportModel(Location.JEDDAH)
-            );
-            default -> null;
-        };
-    }
-
-    private List<AirportModel> getExpectedArrivalLocations() {
-        String caller = getCaller();
-
-        return switch (caller) {
-            case "searchForFlights" -> List.of(new AirportModel(Location.DUBAI),
-                    new AirportModel(Location.ISTANBUL),
-                    new AirportModel(Location.BERLIN),
-                    new AirportModel(Location.DELHI),
-                    new AirportModel(Location.NEW_YORK_CITY_JFK),
-                    new AirportModel(Location.KUALA_LUMPUR),
-                    new AirportModel(Location.PHUKET)
-            );
-            default -> null;
         };
     }
 

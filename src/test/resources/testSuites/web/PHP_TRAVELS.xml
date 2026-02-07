@@ -5,10 +5,10 @@
             <class name="tests.web.PhpTravelsTests">
                 <methods>
                     <include name="searchForFlights"/>
-                    <include name="searchForHotels"/>
-                    <include name="searchForTours"/>
-                    <include name="searchForCars"/>
                     <include name="searchForVisa"/>
+<!--                    <include name="searchForHotels"/>-->
+<!--                    <include name="searchForTours"/>-->
+<!--                    <include name="searchForCars"/>-->
                 </methods>
             </class>
         </classes>

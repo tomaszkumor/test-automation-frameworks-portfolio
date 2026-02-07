@@ -462,7 +462,7 @@ public class SearchBarVisa extends SearchBarVisaLocators {
 
     private void checkIfSearchBarIsDisplayed() {
         check.isElementDisplayed(visaTab, 15);
-        log.info("Visa search bar has been displayed.");
+        log.info("Visa tab has been displayed.");
     }
 
     private DestinationModel getExpectedDepartureCountryFromDataProvider(PhpTravelsModel phpTravelsModel) {
