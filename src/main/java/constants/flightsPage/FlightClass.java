@@ -3,7 +3,7 @@ package constants.flightsPage;
 import lombok.Getter;
 
 @Getter
-public enum CabinClass {
+public enum FlightClass {
     ECONOMY("Economy"),
     ECONOMY_PREMIUM("Economy Premium"),
     BUSINESS("Business"),
@@ -11,7 +11,7 @@ public enum CabinClass {
 
     private final String cabinClass;
 
-    CabinClass(String cabinClass) {
+    FlightClass(String cabinClass) {
         this.cabinClass = cabinClass;
     }
 }

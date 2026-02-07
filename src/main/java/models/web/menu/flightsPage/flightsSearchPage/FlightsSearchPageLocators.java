@@ -5,6 +5,4 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class FlightsSearchPageLocators extends NavigationHeaderAndFooter {
-    @FindBy(xpath = "//button[@id = 'cookie_stop']")
-    WebElement hideAdButton;
 }

@@ -2,13 +2,13 @@
 environment: ENV1
 
 # web / mobile / api
-platform: api
+platform: web
 
 web:
   # chrome / firefox / safari
   browser: chrome
   grid: false
-  debug: false
+  debug: true
   headless: false
 mobile:
 # android / ios

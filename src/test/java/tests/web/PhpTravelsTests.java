@@ -73,6 +73,9 @@ public class PhpTravelsTests extends BaseTest {
                 .selectDepartureCountry(phpTravelsModel)
                 .selectArrivalCountry(phpTravelsModel)
                 .selectDate(phpTravelsModel)
+                .selectVisaType(phpTravelsModel)
+                .selectProcessingSpeed(phpTravelsModel)
+                .selectTravellers(phpTravelsModel)
                 .clickOnSearchButton();
     }
 }

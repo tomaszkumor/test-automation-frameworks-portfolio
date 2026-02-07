@@ -1,9 +1,11 @@
 package dataProviders.dataProviders.web.landingPage;
 
-import constants.flightsPage.CabinClass;
-import constants.flightsPage.FlightDestination;
+import constants.flightsPage.FlightClass;
+import constants.flightsPage.FlightType;
 import constants.common.Location;
 import constants.header.HeaderLanguage;
+import constants.visaPage.ProcessingSpeedType;
+import constants.visaPage.VisaType;
 import dataProviders.dataProvidersModels.web.carsPageModels.CarsPageModel;
 import dataProviders.dataProvidersModels.web.carsPageModels.TimeModel;
 import dataProviders.dataProvidersModels.web.commonModels.DateModel;
@@ -39,13 +41,11 @@ public class LandingPageDP {
                                 .builder()
                                 .expectedDepartureLocation(Location.NEW_YORK_CITY_AA)
                                 .expectedArrivalLocation(Location.BERLIN)
-                                .expectedCabinClass(CabinClass.FIRST)
-                                .expectedFlightDestination(FlightDestination.RETURN)
+                                .expectedFlightClass(FlightClass.FIRST)
+                                .expectedFlightType(FlightType.RETURN)
                                 .expectedDepartureDate(expectedDepartureDate)
                                 .expectedReturnDate(expectedReturnDate)
                                 .expectedTravellers(expectedTravellers)
-                                .expectedDepartureLocations(expectedDepartureLocations)
-                                .expectedArrivalLocations(expectedArrivalLocations)
                                 .build())
                         .build()
                 }
@@ -117,6 +117,9 @@ public class LandingPageDP {
                                 .expectedDate(new DateModel("2026", Month.JUNE, "19"))
                                 .expectedDepartureDestination(DestinationModel.builder().country("Poland").build())
                                 .expectedArrivalDestination(DestinationModel.builder().country("Spain").build())
+                                .expectedVisaType(VisaType.MEDICAL)
+                                .expectedProcessingSpeed(ProcessingSpeedType.RUSH)
+                                .expectedTravellers(new TravellerModel("5", "0", "0"))
                                 .build())
                         .build()
                 }
