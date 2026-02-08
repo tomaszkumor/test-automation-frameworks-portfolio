@@ -1,0 +1,13 @@
+apiFilesPaths:
+  requestBody:
+    postRequestUser: src/main/resources/api/env2/request/PostRequestUser_requestBody.json
+    putRequestUser: src/main/resources/api/env2/request/PutRequestUser_requestBody.json
+    postRequestPet: src/main/resources/api/env2/request/PostRequestPet_requestBody.json
+    putRequestPet: src/main/resources/api/env2/request/PutRequestPet_requestBody.json
+    postRequestStoreOrder: src/main/resources/api/env2/request/PostRequestStoreOrder_requestBody.json
+  responseBody:
+    postRequestUser: src/main/resources/api/env2/response/PostRequestUser_responseBody.json
+    getRequestUser: src/main/resources/api/env2/response/GetRequestUser_responseBody.json
+    getRequestPetFindById: src/main/resources/api/env2/response/GetRequestPetFindById_responseBody.json
+    getRequestStoreOrder: src/main/resources/api/env2/response/GetRequestStoreOrder_responseBody.json
+  file:

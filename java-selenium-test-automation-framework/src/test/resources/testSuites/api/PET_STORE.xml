@@ -1,0 +1,26 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="API: Pet Store test suite" thread-count="1">
+    <test name="Check happy path flow">
+        <classes>
+            <class name="tests.api.PetStoreTest">
+                <methods>
+                    <include name="sendGetRequestUserLoginAndCheckStatusCode"/>
+                    <include name="sendPostRequestUserAndCheckResponse"/>
+                    <include name="sendGetRequestUserAndCheckResponse"/>
+                    <include name="sendPutRequestUserAndCheckStatusCode"/>
+                    <include name="sendDeleteRequestUserAndCheckStatusCode"/>
+                    <include name="sendPostRequestPetAndCheckStatusCode"/>
+                    <include name="sendGetRequestPetFindByStatusAndCheckStatusCode"/>
+                    <include name="sendGetRequestPetFindByIdAndCheckResponse"/>
+                    <include name="sendPutRequestPetAndCheckStatusCode"/>
+                    <include name="sendDeleteRequestPetAndCheckStatusCode"/>
+                    <include name="sendGetRequestStoreInventoryAndCheckStatusCode"/>
+                    <include name="sendPostRequestStoreOrderAndCheckStatusCode"/>
+                    <include name="sendGetRequestStoreOrderAndCheckResponse"/>
+                    <include name="sendDeleteRequestStoreOrderAndCheckStatusCode"/>
+                    <include name="sendGetRequestUserLogoutAndCheckStatusCode"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

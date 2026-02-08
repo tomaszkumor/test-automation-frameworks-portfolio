@@ -1,0 +1,18 @@
+# ENV1 / ENV2
+environment: ENV1
+
+# web / mobile / api
+platform: web
+
+web:
+  # chrome / firefox / safari
+  browser: chrome
+  grid: false
+  debug: false
+  headless: false
+mobile:
+# android / ios
+  system: android
+  debug: false
+api:
+  debug: false

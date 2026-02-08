@@ -2,10 +2,12 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-/allure-results
+/java-selenium-test-automation-framework/allure-results
+/java-playwright-test-automation-framework/allure-results
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
+.idea/encodings.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/

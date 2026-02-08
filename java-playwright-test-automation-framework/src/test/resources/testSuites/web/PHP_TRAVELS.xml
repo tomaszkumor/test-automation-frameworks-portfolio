@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Web: PHP Travels test suite" thread-count="1" parallel="tests">
+    <test name="Landing page test suite" thread-count="1" parallel="methods" verbose="1">
+        <classes>
+            <class name="tests.web.PhpTravelsTests">
+                <methods>
+                    <include name="searchForFlights"/>
+                    <include name="searchForVisa"/>
+<!--                    <include name="searchForHotels"/>-->
+<!--                    <include name="searchForTours"/>-->
+<!--                    <include name="searchForCars"/>-->
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

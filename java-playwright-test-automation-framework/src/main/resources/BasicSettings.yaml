@@ -1,0 +1,15 @@
+# ENV1 / ENV2
+environment: ENV1
+
+# web / api
+platform: web
+
+web:
+  # chromium / firefox / webkit
+  engine: firefox
+  remote: false
+  debug: false
+  headless: false
+
+api:
+  debug: false
