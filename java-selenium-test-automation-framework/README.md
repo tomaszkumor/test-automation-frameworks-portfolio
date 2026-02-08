@@ -12,24 +12,24 @@ This framework is intended as a **portfolio project** demonstrating practical kn
 
 ### Clone repository:
 ```bash
-git clone https://github.com/tomaszkumor/java-selenium-test-automation-framework.git
+git clone https://github.com/tomaszkumor/test-automation-frameworks-portfolio.git
 ```
 ### Install dependencies:
 ```bash
-cd java-selenium-test-automation-framework
+cd test-automation-frameworks-portfolio
 mvn clean install
 ```
 ### Run
 #### API tests:
 
 ```bash
-mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/api/PET_STORE.xml -Denvironment=ENV1 -Dplatform=api -Dapi.debug=false
+mvn -pl java-selenium-test-automation-framework test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/api/PET_STORE.xml -Denvironment=ENV1 -Dplatform=api -Dapi.debug=false
 ```
 
 #### Web tests:
 
 ```bash
-mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/web/PHP_TRAVELS.xml -Denvironment=ENV1 -Dplatform=web -Dweb.browser=chrome -Dweb.grid=false -Dweb.debug=false -Dweb.headless=false
+mvn -pl java-selenium-test-automation-framework test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/web/PHP_TRAVELS.xml -Denvironment=ENV1 -Dplatform=web -Dweb.browser=chrome -Dweb.grid=false -Dweb.debug=false -Dweb.headless=false
 ```
 
 #### Mobile tests (Android):
@@ -61,7 +61,7 @@ public UiAutomator2Options setAndroidCapabilities() {
 ```
 7. Type command in your PowerShell/Terminal.
 ```bash
-mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/mobile/WIKI_ALPHA.xml -Denvironment=ENV1 -Dplatform=mobile -Dmobile.system=android -Dmobile.debug=false
+mvn -pl java-selenium-test-automation-framework test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/mobile/WIKI_ALPHA.xml -Denvironment=ENV1 -Dplatform=mobile -Dmobile.system=android -Dmobile.debug=false
 ```
 
 > **Note:**
@@ -70,7 +70,7 @@ mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/mobile/WIKI_ALPH
 
 ### Generate Allure report:
 ```bash
-allure serve
+allure serve java-selenium-test-automation-framework/allure-results
 ```
 
 ## Technology stack
@@ -139,41 +139,49 @@ No Maven or TestNG parameters are required — all runtime behavior is driven vi
 ## Project structure:
 
 ```
-src/
- ├── main
- │     ├── java
- │     │     ├── actions
- │     │     ├── basePageFactory
- │     │     ├── config
- │     │     ├── constants
- │     │     ├── dataProviders
- │     │     ├── driver
- │     │     ├── listeners
- │     │     ├── models
- │     │     │     ├── api
- │     │     │     ├── mobile
- │     │     │     └── web
- │     │     └── utils
- │     └── resources
- │           ├── api
- │           ├── filesPaths
- │           ├── mobileApp
- │           ├── settings
- │           ├── users
- │           └── BasicSettings.yaml
- └── test
-       ├── java
-       │     ├── baseTest
-       │     └── tests
-       │           ├── api
-       │           ├── mobile
-       │           └── web
-       └── resources
-             ├── testSuites
-             │     ├── api
-             │     ├── mobile
-             │     └── web
-             └── log4j2.xml
+test-automation-frameworks-portfolio
+ ├── java-playwright-test-automation-framework
+ ├── java-selenium-test-automation-framework
+ │    ├── allure-results  
+ │    ├── src
+ │    │    ├── main
+ │    │    │     ├── java
+ │    │    │     │     ├── actions
+ │    │    │     │     ├── basePageFactory
+ │    │    │     │     ├── config
+ │    │    │     │     ├── constants
+ │    │    │     │     ├── dataProviders
+ │    │    │     │     ├── driver
+ │    │    │     │     ├── listeners
+ │    │    │     │     ├── models
+ │    │    │     │     │     ├── api
+ │    │    │     │     │     ├── mobile
+ │    │    │     │     │     └── web
+ │    │    │     │     └── utils
+ │    │    │     └── resources
+ │    │    │           ├── api
+ │    │    │           ├── filesPaths
+ │    │    │           ├── mobileApp
+ │    │    │           ├── settings
+ │    │    │           ├── users
+ │    │    │           └── BasicSettings.yaml
+ │    │    └── test
+ │    │          ├── java
+ │    │          │     ├── baseTest
+ │    │          │     └── tests
+ │    │          │           ├── api
+ │    │          │           ├── mobile
+ │    │          │           └── web
+ │    │          └── resources
+ │    │                ├── testSuites
+ │    │                │     ├── api
+ │    │                │     ├── mobile
+ │    │                │     └── web
+ │    │                └── log4j2.xml
+ │    ├── pom.xml
+ │    └── README.md
+ ├── pom.xml
+ └── README.md
 ```
 
 ## Reporting & logging

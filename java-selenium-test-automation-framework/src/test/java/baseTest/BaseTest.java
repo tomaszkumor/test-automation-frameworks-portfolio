@@ -10,6 +10,7 @@ import lombok.SneakyThrows;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 
 import java.time.Duration;
 
@@ -17,6 +18,11 @@ import static driver.BaseDriver.getWebDriver;
 import static utils.logger.Log4J.log;
 
 public class BaseTest {
+    @BeforeSuite
+    public void beforeSuite() {
+        log.info("FRAMEWORK: SELENIUM + APPIUM + RESTASSURED");
+    }
+
     @BeforeMethod
     public void beforeMethod() {
         String platform = getPlatform();

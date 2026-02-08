@@ -11,29 +11,29 @@ This framework is intended as a **portfolio project** demonstrating practical kn
 
 ### Clone repository:
 ```bash
-git clone https://github.com/tomaszkumor/java-playwright-test-automation-framework.git
+git clone https://github.com/tomaszkumor/test-automation-frameworks-portfolio.git
 ```
 ### Install dependencies:
 ```bash
-cd java-playwright-test-automation-framework
+cd test-automation-frameworks-portfolio
 mvn clean install
 ```
 ### Run
 #### API tests:
 
 ```bash
-mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/api/PET_STORE.xml -Denvironment=ENV1 -Dplatform=api -Dapi.debug=false
+mvn -pl java-playwright-test-automation-framework test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/api/PET_STORE.xml -Denvironment=ENV1 -Dplatform=api -Dapi.debug=false
 ```
 
 #### Web tests:
 
 ```bash
-mvn test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/web/PHP_TRAVELS.xml -Denvironment=ENV1 -Dplatform=web -Dweb.engine=firefox -Dweb.remote=false -Dweb.debug=false -Dweb.headless=false
+mvn -pl java-playwright-test-automation-framework test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/web/PHP_TRAVELS.xml -Denvironment=ENV1 -Dplatform=web -Dweb.engine=firefox -Dweb.remote=false -Dweb.debug=false -Dweb.headless=false
 ```
 
 ### Generate Allure report:
 ```bash
-allure serve
+allure serve java-playwright-test-automation-framework/allure-results
 ```
 
 ## Technology stack
@@ -90,37 +90,45 @@ No Maven or TestNG parameters are required — all runtime behavior is driven vi
 ## Project structure:
 
 ```
-src
- ├── main
- │     ├── java
- │     │     ├── actions
- │     │     ├── actionsFactory
- │     │     ├── config
- │     │     ├── constants
- │     │     ├── dataProviders
- │     │     ├── listeners
- │     │     ├── models
- │     │     │     ├── api
- │     │     │     └── web
- │     │     ├── playwrightFactory
- │     │     └── utils
- │     └── resources
- │           ├── api
- │           ├── filesPaths
- │           ├── settings
- │           ├── users
- │           └── BasicSettings.yaml
- └── test
-       ├── java
-       │     ├── baseTest
-       │     └── tests
-       │           ├── api
-       │           └── web
-       └── resources
-             ├── testSuites
-             │     ├── api
-             │     └── web
-             └── log4j2.xml
+test-automation-frameworks-portfolio
+ ├── java-selenium-test-automation-framework
+ ├── java-playwright-test-automation-framework
+ │    ├── allure-results  
+ │    ├── src
+ │    │    ├── main
+ │    │    │     ├── java
+ │    │    │     │     ├── actions
+ │    │    │     │     ├── actionsFactory
+ │    │    │     │     ├── config
+ │    │    │     │     ├── constants
+ │    │    │     │     ├── dataProviders
+ │    │    │     │     ├── listeners
+ │    │    │     │     ├── models
+ │    │    │     │     │     ├── api
+ │    │    │     │     │     └── web
+ │    │    │     │     ├── playwrightFactory
+ │    │    │     │     └── utils
+ │    │    │     └── resources
+ │    │    │           ├── api
+ │    │    │           ├── filesPaths
+ │    │    │           ├── settings
+ │    │    │           ├── users
+ │    │    │           └── BasicSettings.yaml
+ │    │    └── test
+ │    │          ├── java
+ │    │          │     ├── baseTest
+ │    │          │     └── tests
+ │    │          │           ├── api
+ │    │          │           └── web
+ │    │          └── resources
+ │    │                ├── testSuites
+ │    │                │     ├── api
+ │    │                │     └── web
+ │    │                └── log4j2.xml
+ │    ├── pom.xml
+ │    └── README.md
+ ├── pom.xml
+ └── README.md
 ```
 
 ## Reporting & logging

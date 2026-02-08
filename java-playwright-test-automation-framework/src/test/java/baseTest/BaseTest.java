@@ -14,6 +14,8 @@ import static utils.logger.Log4J.log;
 public class BaseTest {
     @BeforeSuite
     public void beforeSuite() {
+        log.info("FRAMEWORK: PLAYWRIGHT");
+
         String platform = TestStackProperties.getPlatform();
         switch (platform) {
             case "web" -> {
