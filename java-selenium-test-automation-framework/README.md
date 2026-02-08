@@ -178,10 +178,10 @@ test-automation-frameworks-portfolio
  │    │                │     ├── mobile
  │    │                │     └── web
  │    │                └── log4j2.xml
- │    ├── pom.xml
- │    └── README.md
- ├── pom.xml
- └── README.md
+ │    ├── pom.xml (java-selenium-test-automation-framework module POM)
+ │    └── README.md (java-selenium-test-automation-framework README file)
+ ├── pom.xml (parent POM for multi-module project)
+ └── README.md (main overview README file)
 ```
 
 ## Reporting & logging

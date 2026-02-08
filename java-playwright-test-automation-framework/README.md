@@ -125,10 +125,10 @@ test-automation-frameworks-portfolio
  │    │                │     ├── api
  │    │                │     └── web
  │    │                └── log4j2.xml
- │    ├── pom.xml
- │    └── README.md
- ├── pom.xml
- └── README.md
+ │    ├── pom.xml (java-playwright-test-automation-framework module POM)
+ │    └── README.md (java-playwright-test-automation-framework README file)
+ ├── pom.xml (parent POM for multi-module project)
+ └── README.md (main overview README file)
 ```
 
 ## Reporting & logging
