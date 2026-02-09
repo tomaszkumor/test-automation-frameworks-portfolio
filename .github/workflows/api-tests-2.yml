@@ -1,46 +1,60 @@
-name: API tests for java-playwright-test-automation-framework
+name: API tests (Playwright framework)
 
 on:
+  push:
+    branches:
+      - main
+      - issue-*
+
   workflow_dispatch:
   schedule:
     - cron: '5 6 * * 1'   # 07:05 PL
 
-jobs:
-  api-tests-2:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+permissions:
+  contents: write
 
-      - uses: actions/setup-java@v4
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
 
-      - name: Run API tests for java-playwright-test-automation-framework
-        run:  | 
-         mvn -pl java-playwright-test-automation-framework test \
-          -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/api/PET_STORE.xml \
-          -Denvironment=ENV1 -Dplatform=api -Dapi.debug=false
-
-      - name: Upload Allure results (artifact)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results-api-2
-          path: java-playwright-test-automation-framework/allure-results
-
-      - name: Generate Allure HTML report
-        if: always()
+      - name: Run API tests
         run: |
-          mvn allure:report -pl java-playwright-test-automation-framework
-          mkdir -p allure-public/api-2
-          cp -r java-playwright-test-automation-framework/target/site/allure-maven-plugin/* allure-public/api-2/
+          mvn -pl java-playwright-test-automation-framework test \
+           -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/api/PET_STORE.xml \
+           -Denvironment=ENV1 -Dplatform=api -Dapi.debug=false
 
-      - name: Deploy Allure report to GitHub Pages
+      - name: Checkout gh-pages (history)
+        if: always()
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+        continue-on-error: true
+
+      - name: Generate Allure report
+        if: always()
+        uses: simple-elf/allure-report-action@master
+        with:
+          allure_results: java-playwright-test-automation-framework/allure-results
+          gh_pages: gh-pages/api-tests-2
+          allure_history: allure-history/api-tests-2
+          keep_reports: 10
+
+      - name: Deploy report to GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: allure-public
+          publish_dir: gh-pages

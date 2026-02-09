@@ -1,4 +1,4 @@
-name: API tests
+name: API tests (Selenium framework)
 
 on:
   push:
@@ -42,14 +42,14 @@ jobs:
           path: gh-pages
         continue-on-error: true
 
-      - name: Generate Allure report (separate per run)
+      - name: Generate Allure report
         if: always()
         uses: simple-elf/allure-report-action@master
         with:
           allure_results: java-selenium-test-automation-framework/allure-results
-          gh_pages: gh-pages
-          allure_history: allure-history
-          keep_reports: 20
+          gh_pages: gh-pages/api-tests-1
+          allure_history: allure-history/api-tests-1
+          keep_reports: 10
 
       - name: Deploy report to GitHub Pages
         if: always()
@@ -57,4 +57,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: allure-history
+          publish_dir: gh-pages
