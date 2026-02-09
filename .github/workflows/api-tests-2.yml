@@ -1,0 +1,21 @@
+name: API Tests 2
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '5 6 * * 1'   # 07:05 PL
+
+jobs:
+  api-tests-2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run API tests 2
+        run: mvn -pl java-playwright-test-automation-framework test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/api/PET_STORE.xml -Denvironment=ENV1 -Dplatform=api -Dapi.debug=false

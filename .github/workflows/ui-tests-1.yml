@@ -1,0 +1,21 @@
+name: UI Tests 1
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 6 * * 1'  # 07:30 PL
+
+jobs:
+  ui-tests-1:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Run UI tests 1
+        run: mvn -pl java-selenium-test-automation-framework test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/web/PHP_TRAVELS.xml -Denvironment=ENV1 -Dplatform=web -Dweb.browser=chrome -Dweb.grid=false -Dweb.debug=false -Dweb.headless=false
