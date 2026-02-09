@@ -6,11 +6,6 @@ on:
       - main
       - issue-*
 
-  pull_request_target:
-    branches:
-      - main
-      - issue-*
-
   workflow_dispatch:
   schedule:
     - cron: '0 6 * * 1'   # 07:00 PL
@@ -20,44 +15,39 @@ permissions:
 
 jobs:
   build:
-    name: Build and test
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Set up JDK 21
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v4
         with:
-         java-version: '21'
-         distribution: 'temurin'
-         cache: maven
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
 
       - name: Run API tests
         run: |
           mvn -pl java-selenium-test-automation-framework test \
             -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/api/PET_STORE.xml \
             -Denvironment=ENV1 -Dplatform=api -Dapi.debug=false
-      
-      - name: Test Report
-        uses: dorny/test-reporter@v2
-        if: always()
-        with:
-          name: Test Results
-          path: ${{ github.workspace }}/target/surefire-reports/TEST-TestSuite.xml
 
-      - name: Get Allure history
-        uses: actions/checkout@v6
+      - name: Checkout gh-pages (history)
         if: always()
-        continue-on-error: true
+        uses: actions/checkout@v4
         with:
           ref: gh-pages
           path: gh-pages
+        continue-on-error: true
 
-      - name: Allure Report action from marketplace
-        uses: simple-elf/allure-report-action@master
+      - name: Generate Allure report (separate per run)
         if: always()
+        uses: simple-elf/allure-report-action@master
         with:
-          allure_results: target/allure-results
+          allure_results: java-selenium-test-automation-framework/allure-results
+          gh_pages: gh-pages
           allure_history: allure-history
           keep_reports: 20
 
@@ -65,6 +55,6 @@ jobs:
         if: always()
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          report-name: gh-pages
-          publish-html: allure-history
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
