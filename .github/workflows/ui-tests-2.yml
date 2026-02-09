@@ -1,10 +1,6 @@
-name: UI Tests (Playwright framework)
+name: UI tests (Playwright framework)
 
 on:
-  push:
-    branches:
-      - main
-      - issue-*
   workflow_dispatch:
   schedule:
     - cron: '0 7 * * 1'   # 08:00 PL
@@ -13,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  ui-tests-2:
+  ui-tests-playwright:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,13 +23,21 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Install dependencies for Playwright
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libnss3 libxss1 libasound2 libatk1.0-0 libcups2 libgbm1 libgtk-3-0 \
+            libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 libxext6 libwoff1 \
+            libopus0 libwebp6 libwebpdemux2 libevent-2.1-7 libgstreamer1.0-0 \
+            libgstreamer-plugins-base1.0-0 libegl1 libxtst6
+
       - name: Run UI tests
         run: |
           mvn -pl java-playwright-test-automation-framework test \
             -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/web/PHP_TRAVELS.xml \
             -Denvironment=ENV1 -Dplatform=web \
-            -Dweb.engine=firefox -Dweb.remote=false \
-            -Dweb.debug=false -Dweb.headless=true
+            -Dweb.engine=${{ inputs.web_engine }} -Dweb.debug=false -Dweb.headless=true
 
       - name: Upload Allure results
         if: always()
