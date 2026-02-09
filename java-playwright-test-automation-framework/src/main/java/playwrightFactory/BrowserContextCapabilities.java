@@ -17,26 +17,40 @@ public class BrowserContextCapabilities {
 
 
     public NewContextOptions getFirefoxContextCapabilities() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        NewContextOptions newContextOptions = new NewContextOptions();
 
-        return new NewContextOptions()
-                .setViewportSize((int) screenSize.getWidth(), (int) screenSize.getHeight())
+        newContextOptions
                 .setIgnoreHTTPSErrors(true)
                 .setLocale("pl-PL")
                 .setTimezoneId("Europe/Warsaw")
                 .setPermissions(List.of("geolocation", "notifications"));
+
+        if (!WebProperties.isHeadlessMode()) {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            newContextOptions
+                    .setViewportSize((int) screenSize.getWidth(), (int) screenSize.getHeight());
+        }
+
+        return newContextOptions;
     }
 
 
     public NewContextOptions getWebkitContextCapabilities() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        NewContextOptions newContextOptions = new NewContextOptions();
 
-        return new NewContextOptions()
-                .setViewportSize((int) screenSize.getWidth(), (int) screenSize.getHeight())
+        newContextOptions
                 .setIgnoreHTTPSErrors(true)
                 .setLocale("pl-PL")
                 .setTimezoneId("Europe/Warsaw")
                 .setPermissions(List.of("geolocation", "notifications"));
+
+        if (!WebProperties.isHeadlessMode()) {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            newContextOptions
+                    .setViewportSize((int) screenSize.getWidth(), (int) screenSize.getHeight());
+        }
+
+        return newContextOptions;
     }
 }
 
