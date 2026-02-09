@@ -19,3 +19,10 @@ jobs:
 
       - name: Run API tests 1
         run: mvn -pl java-selenium-test-automation-framework test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/api/PET_STORE.xml -Denvironment=ENV1 -Dplatform=api -Dapi.debug=false
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: java-selenium-test-automation-framework/allure-results
