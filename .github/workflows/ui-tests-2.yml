@@ -1,4 +1,4 @@
-name: UI Tests 2
+name: UI tests for java-playwright-test-automation-framework
 
 on:
   workflow_dispatch:
@@ -17,7 +17,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Run UI tests 2
+      - name: Run UI tests for java-playwright-test-automation-framework
         run: mvn -pl java-playwright-test-automation-framework test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/web/PHP_TRAVELS.xml -Denvironment=ENV1 -Dplatform=web -Dweb.engine=firefox -Dweb.remote=false -Dweb.debug=false -Dweb.headless=true
 
       - name: Upload Allure results

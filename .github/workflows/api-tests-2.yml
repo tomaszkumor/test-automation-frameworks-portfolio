@@ -1,4 +1,4 @@
-name: API Tests 2
+name: API tests for java-playwright-test-automation-framework
 
 on:
   workflow_dispatch:
@@ -17,7 +17,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Run API tests 2
+      - name: Run API tests for java-playwright-test-automation-framework
         run: mvn -pl java-playwright-test-automation-framework test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/api/PET_STORE.xml -Denvironment=ENV1 -Dplatform=api -Dapi.debug=false
 
       - name: Upload Allure results
