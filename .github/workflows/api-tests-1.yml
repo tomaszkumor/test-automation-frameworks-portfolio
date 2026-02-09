@@ -37,8 +37,8 @@ jobs:
         if: always()
         run: |
           mvn allure:report -pl java-selenium-test-automation-framework
-          mkdir -p allure-public/api-1
-          cp -r java-selenium-test-automation-framework/target/site/allure-maven-plugin/* allure-public/api-1/
+          mkdir -p api-1
+          cp -r java-selenium-test-automation-framework/target/site/allure-maven-plugin/* api-1/
 
       - name: Deploy Allure report to GitHub Pages
         if: always()
@@ -46,4 +46,4 @@ jobs:
         with:
           personal_token: ${{ secrets.GH_PAT }}
           publish_branch: gh-pages
-          publish_dir: allure-public
+          publish_dir: .
