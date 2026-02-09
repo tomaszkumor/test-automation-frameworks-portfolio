@@ -1,4 +1,4 @@
-name: API tests for java-selenium-test-automation-framework
+name: API tests with Allure action
 
 on:
   workflow_dispatch:
@@ -10,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Java 21
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
@@ -26,26 +24,10 @@ jobs:
             -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/api/PET_STORE.xml \
             -Denvironment=ENV1 -Dplatform=api -Dapi.debug=false
 
-      - name: Upload Allure results (artifact)
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Generate and publish Allure report
+        uses: allure-framework/github-action@v3
         with:
-          name: allure-results-api-1
-          path: java-selenium-test-automation-framework/allure-results
-
-      - name: Generate Allure HTML report
-        if: always()
-        run: |
-          mkdir -p java-selenium-test-automation-framework/target/allure-results
-          cp -r java-selenium-test-automation-framework/allure-results/* java-selenium-test-automation-framework/target/allure-results/
-          mvn allure:report -pl java-selenium-test-automation-framework
-          mkdir -p api-1
-          cp -r java-selenium-test-automation-framework/target/site/allure-maven-plugin/* api-1/
-
-      - name: Deploy Allure report to GitHub Pages
-        if: always()
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          personal_token: ${{ secrets.GH_PAT }}
-          publish_branch: gh-pages
-          publish_dir: .
+          results-directories: java-selenium-test-automation-framework/allure-results
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          report-name: api-1
+          publish-html: true
