@@ -36,9 +36,8 @@ jobs:
       - name: Run UI tests
         run: |
           mvn -pl java-playwright-test-automation-framework test \
-            -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/web/PHP_TRAVELS.xml \
-            -Denvironment=ENV1 -Dplatform=web \
-            -Dweb.engine=${{ inputs.web_engine }} -Dweb.debug=false -Dweb.headless=true
+          -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/web/PHP_TRAVELS.xml \
+          -Denvironment=ENV1 -Dplatform=web -Dweb.engine=firefox -Dweb.remote=false -Dweb.debug=false -Dweb.headless=true
 
       - name: Upload Allure results
         if: always()
