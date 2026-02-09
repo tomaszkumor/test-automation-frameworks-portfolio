@@ -18,11 +18,29 @@ jobs:
           cache: maven
 
       - name: Run API tests for java-playwright-test-automation-framework
-        run: mvn -pl java-playwright-test-automation-framework test -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/api/PET_STORE.xml -Denvironment=ENV1 -Dplatform=api -Dapi.debug=false
+        run:  | 
+         mvn -pl java-playwright-test-automation-framework test \
+          -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/api/PET_STORE.xml \
+          -Denvironment=ENV1 -Dplatform=api -Dapi.debug=false
 
-      - name: Upload Allure results
+      - name: Upload Allure results (artifact)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
+          name: allure-results-api-2
           path: java-playwright-test-automation-framework/allure-results
+
+      - name: Generate Allure HTML report
+        if: always()
+        run: |
+          mvn allure:report -pl java-playwright-test-automation-framework
+          mkdir -p allure-public/api-2
+          cp -r java-playwright-test-automation-framework/target/site/allure-maven-plugin/* allure-public/api-2/
+
+      - name: Deploy Allure report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-public
