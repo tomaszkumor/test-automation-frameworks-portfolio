@@ -1,11 +1,6 @@
-name: API tests (Selenium framework)
+name: API Tests 1
 
 on:
-  push:
-    branches:
-      - main
-      - issue-*
-
   workflow_dispatch:
   schedule:
     - cron: '0 6 * * 1'   # 07:00 PL
@@ -13,12 +8,16 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: api-tests-1
+  cancel-in-progress: true
+
 jobs:
-  build:
+  api-tests-1:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up JDK 21
@@ -34,27 +33,15 @@ jobs:
             -Dsurefire.suiteXmlFiles=src/test/resources/testSuites/api/PET_STORE.xml \
             -Denvironment=ENV1 -Dplatform=api -Dapi.debug=false
 
-      - name: Checkout gh-pages (history)
-        if: always()
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: gh-pages
-        continue-on-error: true
-
       - name: Generate Allure report
-        if: always()
-        uses: simple-elf/allure-report-action@master
-        with:
-          allure_results: java-selenium-test-automation-framework/allure-results
-          gh_pages: gh-pages/api-tests-1
-          allure_history: allure-history/api-tests-1
-          keep_reports: 10
+        run: |
+          mkdir -p allure-history/api-tests-1
+          mvn allure:report -pl java-selenium-test-automation-framework
+          cp -r java-selenium-test-automation-framework/target/site/allure-maven-plugin/* allure-history/api-tests-1/
 
       - name: Deploy report to GitHub Pages
-        if: always()
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: gh-pages
+          publish_dir: allure-history/api-tests-1
