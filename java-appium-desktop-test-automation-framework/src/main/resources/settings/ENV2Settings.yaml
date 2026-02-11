@@ -1,0 +1,6 @@
+web_url: https://phptravels.net/
+api_url: https://petstore.swagger.io/v2
+android_path: src/main/resources/mobileApp/app-alpha-universal-release.apk
+ios_path: x
+application_package: org.wikipedia.alpha
+application_activity: org.wikipedia.main.MainActivity

@@ -13,6 +13,7 @@
     <modules>
         <module>java-selenium-test-automation-framework</module>
         <module>java-playwright-test-automation-framework</module>
+        <module>java-appium-desktop-test-automation-framework</module>
     </modules>
 
     <properties>

@@ -1,0 +1,8 @@
+# ENV1 / ENV2
+environment: ENV1
+
+# mac
+platform: macos
+
+macos:
+  debug: false

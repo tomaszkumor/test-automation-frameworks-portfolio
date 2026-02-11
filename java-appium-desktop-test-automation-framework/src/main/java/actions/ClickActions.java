@@ -1,0 +1,102 @@
+package actions;
+
+import lombok.SneakyThrows;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
+import static driver.BaseDriver.getWebDriver;
+import static utils.screenshot.Screenshot.attachScreenshot;
+
+public class ClickActions extends BaseActions {
+    @SneakyThrows
+    public void click(WebElement element) {
+        try {
+            element.click();
+        } catch (Exception e) {
+            throw new Exception("Unable to click on element: " + e.getMessage());
+        }
+    }
+
+    @SneakyThrows
+    public void rightClick(WebElement element) {
+        try {
+            Actions actions = new Actions(getWebDriver().getDriver());
+            actions.contextClick(element).perform();
+        } catch (Exception e) {
+            throw new Exception("Unable to right click on element: " + e.getMessage());
+        }
+    }
+
+    @SneakyThrows
+    public void doubleClickOnElement(WebElement element) {
+        try {
+            Actions actions = new Actions(getWebDriver().getDriver());
+            actions.doubleClick(element).perform();
+        } catch (Exception e) {
+            throw new Exception("Unable to double click on element: " + e.getMessage());
+        }
+    }
+
+    public void clickOnElement(WebElement element, int duration) {
+        click(waitForElementToBeClickable(element, duration));
+    }
+
+    public void clickOnVisibleElement(WebElement element, int duration) {
+        click(waitForVisibilityOfElement(element, duration));
+    }
+
+    public void clickOnElementAndSendKeys(WebElement element, String text, int duration) {
+        click(waitForVisibilityOfElement(element, duration));
+        element.sendKeys(text);
+        element.sendKeys(Keys.TAB);
+    }
+
+    public void clickOnEnabledElement(WebElement element, int duration) {
+        click(waitForElementToBeEnabled(element, duration));
+    }
+
+    public void rightClickOnElement(WebElement element, int duration) {
+        rightClick(waitForElementToBeClickable(element, duration));
+    }
+
+    @SneakyThrows
+    private WebElement waitForVisibilityOfElement(WebElement element, int duration) {
+        try {
+            new WebDriverWait(getWebDriver().getDriver(), Duration.ofSeconds(duration))
+                    .until(ExpectedConditions.visibilityOf(element));
+            return element;
+        } catch (Exception e) {
+            attachScreenshot();
+            throw new Exception("Unable to click on element: " + e.getMessage());
+        }
+    }
+
+    @SneakyThrows
+    private WebElement waitForElementToBeClickable(WebElement element, int duration) {
+        try {
+            new WebDriverWait(getWebDriver().getDriver(), Duration.ofSeconds(duration))
+                    .until(ExpectedConditions.elementToBeClickable(element));
+            return element;
+        } catch (Exception e) {
+            attachScreenshot();
+            throw new Exception("Unable to click on element: " + e.getMessage());
+        }
+    }
+
+    @SneakyThrows
+    private WebElement waitForElementToBeEnabled(WebElement element, int duration) {
+        try {
+            new WebDriverWait(getWebDriver().getDriver(), Duration.ofSeconds(duration))
+                    .until(driver -> element.isEnabled());
+            return element;
+        } catch (Exception e) {
+            attachScreenshot();
+            throw new Exception("Element is disabled: " + e.getMessage());
+        }
+    }
+}
