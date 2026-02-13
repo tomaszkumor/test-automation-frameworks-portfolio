@@ -2,13 +2,12 @@ package baseTest;
 
 import config.TestStackProperties;
 import driver.DesktopProperties;
-import io.appium.java_client.mac.Mac2Driver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
+import java.io.IOException;
 import java.time.Duration;
-import java.util.Map;
 
 import static driver.BaseDriver.getWebDriver;
 import static utils.logger.Log4J.log;
@@ -18,19 +17,21 @@ public class BaseTest {
     public void beforeSuite() {
         log.info("FRAMEWORK: APPIUM");
     }
-
+//TODO: Wprowadz takie zabezpieczenie w before class ze przed testem podjeta jest proba ewentualnego zamkniecia aplikacji jesli jakas instancja jest jeszcze uruchomiona
     @BeforeMethod
     public void beforeMethod() {
         logAll();
         setDriver();
     }
-
-    @AfterMethod(alwaysRun = true)
+//todo: zrob zabezpieczenie przed tym (uruchamiam test i dostaje to): Could not start a new session. Response code 500. Message: The port #10100 at 127.0.0.1 is busy
+    @AfterMethod()
     public void afterMethod() {
+        if (DesktopProperties.isDebugMode()) {
+            return;
+        }
+
         try {
-            if (!DesktopProperties.isDebugMode()) {
-                terminateApplication();
-            }
+            sendCommandQUsingAppleScript();
         } catch (Exception e) {
             log.warn("Failed to terminate application", e);
         } finally {
@@ -38,15 +39,17 @@ public class BaseTest {
         }
     }
 
-
-    private void terminateApplication() {
+    public void sendCommandQUsingAppleScript() {
         String bundleId = getBundleId();
+        String script = "tell application id \"" + bundleId + "\" to quit";
 
-        if (getWebDriver().getDriver() instanceof Mac2Driver mac2Driver) {
-            mac2Driver.executeScript(
-                    "macos: terminateApp",
-                    Map.of("bundleId", bundleId)
-            );
+        try {
+            new ProcessBuilder("osascript", "-e", script)
+                    .inheritIO()
+                    .start()
+                    .waitFor();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

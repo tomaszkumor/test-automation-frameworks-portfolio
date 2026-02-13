@@ -5,4 +5,4 @@ environment: ENV1
 platform: macos
 
 macos:
-  debug: true
+  debug: false

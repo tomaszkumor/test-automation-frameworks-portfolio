@@ -4,6 +4,7 @@ target/
 !**/src/test/**/target/
 /java-selenium-test-automation-framework/allure-results
 /java-playwright-test-automation-framework/allure-results
+/java-appium-desktop-test-automation-framework/allure-results/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

@@ -1,6 +1,5 @@
 package actions;
 
-import io.appium.java_client.mac.Mac2Driver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -21,7 +20,7 @@ public class CheckActions extends BaseActions {
     public boolean isElementDisplayed(WebElement element, int interval, int duration) {
         implicitlyWaitChangeDuration(0);
         try {
-            WebDriverWait wait = new WebDriverWait((Mac2Driver) getWebDriver().getDriver(), Duration.ofSeconds(duration));
+            WebDriverWait wait = new WebDriverWait(getWebDriver().getDriver(), Duration.ofSeconds(duration));
             wait.pollingEvery(Duration.ofMillis(interval));
             wait.until(ExpectedConditions.visibilityOf(element));
             return true;
