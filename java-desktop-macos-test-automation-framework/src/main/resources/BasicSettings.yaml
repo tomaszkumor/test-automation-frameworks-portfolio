@@ -1,0 +1,10 @@
+# ENV1 / ENV2
+environment: ENV1
+
+# mac
+platform: macos
+
+macos:
+# pages / numbers
+  application: pages
+  debug: false
